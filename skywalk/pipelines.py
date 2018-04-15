@@ -8,5 +8,5 @@
 
 class SkywalkPipeline(object):
     def process_item(self, item, spider):
-    	print(item)
+        print(item)
         return item

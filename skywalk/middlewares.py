@@ -8,8 +8,8 @@
 from scrapy import signals
 import random
 import base64
-from settings import PROXIES
-
+# from skywalk.settings import PROXIES
+from skywalk.log import *
 class SkywalkSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
@@ -73,14 +73,14 @@ class RandomUserAgent(object):
     def process_request(self, request, spider):
         request.headers.setdefault('User-Agent', random.choice(self.agents))
 
-class ProxyMiddleware(object):
-    def process_request(self, request, spider):
-        proxy = random.choice(PROXIES)
-        if proxy['user_pass'] is not None:
-            request.meta['proxy'] = "http://%s" % proxy['ip_port']
-            encoded_user_pass = base64.encodestring(proxy['user_pass'])
-            request.headers['Proxy-Authorization'] = 'Basic ' + encoded_user_pass
-            print "**************ProxyMiddleware have pass************" + proxy['ip_port']
-        else:
-            print "**************ProxyMiddleware no pass************" + proxy['ip_port']
-            request.meta['proxy'] = "http://%s" % proxy['ip_port']
+# class ProxyMiddleware(object):
+#     def process_request(self, request, spider):
+#         proxy = random.choice(PROXIES)
+#         if proxy['user_pass'] is not None:
+#             request.meta['proxy'] = "http://%s" % proxy['ip_port']
+#             encoded_user_pass = base64.encodestring(proxy['user_pass'])
+#             request.headers['Proxy-Authorization'] = 'Basic ' + encoded_user_pass
+#             spider.logger.info("**************ProxyMiddleware have pass************" + proxy['ip_port'])
+#         else:
+#             spider.logger.info()
+#             request.meta['proxy'] = "http://%s" % proxy['ip_port']
