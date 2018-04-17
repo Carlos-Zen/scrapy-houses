@@ -57,6 +57,8 @@ class BaletuSpider(scrapy.Spider):
         ''' 
         print(response.url)
         house = HouseItem()
+        #base info
+        house['source_from'] = self.name
         house['title'] = response.css("div.basic-title a::text").extract_first()
         house['apartment'] = house['title']
         house['rental'] = response.css("div.house-text-Akey li.price::text").extract_first()
@@ -91,4 +93,6 @@ class BaletuSpider(scrapy.Spider):
         #falicities
         house['private_falicities'] = [dv2k('baletu','config',fal) for fal in response.css('div#privateFalicities li img::attr(alt)').extract()]
         house['public_falicities'] = [dv2k('baletu','config',fal) for fal in response.css('div#publicFalicities li img::attr(alt)').extract()]
+
+
         yield house
