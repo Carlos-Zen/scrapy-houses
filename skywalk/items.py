@@ -46,3 +46,4 @@ class HouseItem(scrapy.Item):
     uniqe_key = scrapy.Field()
     private_falicities = scrapy.Field()
     public_falicities = scrapy.Field()
+    uniqe_key = scrapy.Field()

@@ -73,14 +73,16 @@ class RandomUserAgent(object):
     def process_request(self, request, spider):
         request.headers.setdefault('User-Agent', random.choice(self.agents))
 
-# class ProxyMiddleware(object):
-#     def process_request(self, request, spider):
-#         proxy = random.choice(PROXIES)
-#         if proxy['user_pass'] is not None:
-#             request.meta['proxy'] = "http://%s" % proxy['ip_port']
-#             encoded_user_pass = base64.encodestring(proxy['user_pass'])
-#             request.headers['Proxy-Authorization'] = 'Basic ' + encoded_user_pass
-#             spider.logger.info("**************ProxyMiddleware have pass************" + proxy['ip_port'])
-#         else:
-#             spider.logger.info()
-#             request.meta['proxy'] = "http://%s" % proxy['ip_port']
+class ProxyMiddleware(object):
+    """Custom ProxyMiddleware."""
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler.settings)
+
+    def __init__(self, settings):
+        self.proxy_list = settings.getlist('PROXY_LIST')
+
+    def parse_request(self, request, spider):
+        # request.meta['proxy'] = 'http://{}'.format(random.choice(self.proxies))
+        request.meta['proxy'] = 'http://{}'.format(self.proxies[0])
