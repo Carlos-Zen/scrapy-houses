@@ -15,6 +15,7 @@ REG = {
     'longi':r'.*var\s+s_lon\s?=\s?\'(-?\d+\.\d+)\';',
     'lati':r'.*var\s+s_lat\s?=\s?\'(-?\d+\.\d+)\';',
     'city':r'.*var\s+city_name\s?=\s?\'(.*)\';',
+    'total_number':r'.*var\s+totalPage\s?=\s?\'(.*)\';',
 }
 
 def trim(string):
@@ -28,9 +29,11 @@ class BaletuSpider(scrapy.Spider):
     name = 'baletu'
     allowed_domains = ['baletu.com']
     start_urls = ['http://sh.baletu.com/zhaofang/']
-
+    custom_settings = {
+        'CLOSESPIDER_ERRORCOUNT': 0
+    }
     def start_requests(self):
-        for i in range(200,300):
+        for i in range(200,201):
             yield scrapy.Request('http://sh.baletu.com/zhaofang/p'+str(i)+'/', self.parse)
 
     def parse_(self, response):
@@ -74,10 +77,11 @@ class BaletuSpider(scrapy.Spider):
             house['rent_type'],house['bedroom_type'] = v2k('rent_type',trim(rent_type)),v2k('bedroom_type',bedroom_type)
         else:
             house['rent_type'] = v2k('rent_type',trim(rent_type_string))
-
-        payment_rental,payment_deposit = response.css("div.house-text-list dd")[4].css("::text").re(REG['payment'])
-        house['payment_rental'],house['payment_deposit'] = chinese_to_arabic(payment_rental),chinese_to_arabic(payment_deposit)
-
+        try:
+            payment_rental,payment_deposit = response.css("div.house-text-list dd")[4].css("::text").re(REG['payment'])
+            house['payment_rental'],house['payment_deposit'] = chinese_to_arabic(payment_rental),chinese_to_arabic(payment_deposit)
+        except Exception:
+            house['payment_rental'], house['payment_deposit'] = 0,0
         house['district'],house['block'] = response.css("div.house-text-list dd")[5].css('a::text').extract()
         house['address'] = response.css("div.house-text-list dd")[6].css('::text').extract_first()
 
