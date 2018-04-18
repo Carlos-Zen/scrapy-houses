@@ -13,6 +13,9 @@ class HouseItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
     brand = scrapy.Field()
+    branch = scrapy.Field()
+    style = scrapy.Field()
+    empty_house_num = scrapy.Field() # 集中式
     province = scrapy.Field()
     city = scrapy.Field()
     district = scrapy.Field()
@@ -29,6 +32,7 @@ class HouseItem(scrapy.Item):
     floor = scrapy.Field()
     building_floor = scrapy.Field()
     rental = scrapy.Field()
+    rental_limit = scrapy.Field()
     deposit = scrapy.Field()
     payment_deposit = scrapy.Field() #付款方式押金月份
     payment_rental = scrapy.Field() #付款方式租金月份
@@ -46,4 +50,5 @@ class HouseItem(scrapy.Item):
     uniqe_key = scrapy.Field()
     private_falicities = scrapy.Field()
     public_falicities = scrapy.Field()
+    features = scrapy.Field()
     uniqe_key = scrapy.Field()
