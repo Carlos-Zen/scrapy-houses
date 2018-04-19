@@ -113,6 +113,7 @@ class BaletuSpider(scrapy.Spider):
         # longti,lati
         house['longi'] = response.css('script').re_first(REG['longi'])
         house['lati'] = response.css('script').re_first(REG['lati'])
+        house['position'] = [house['longi'], house['lati']]
 
         # falicities
         house['private_falicities'] = [dv2k('baletu', 'config', fal) for fal in
@@ -120,7 +121,8 @@ class BaletuSpider(scrapy.Spider):
         house['public_falicities'] = [dv2k('baletu', 'config', fal) for fal in
                                       response.css('div#publicFalicities li img::attr(alt)').extract()]
 
-        # unique_key
+        # date and unique_key
+        house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
         month = time.strftime("%Y-%m", time.localtime())
         house['uniqe_key'] = create_uniqe_key(house, [month])
         house['uniqe_key_no_date'] = create_uniqe_key(house)

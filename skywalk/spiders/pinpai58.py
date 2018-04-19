@@ -5,28 +5,35 @@ from skywalk.utils import *
 from skywalk.dict import *
 
 REG = {
-    'number':r'(\d+)',
-    'yuan':r'(\d+)元',
-    'huxing':r'(\d)室(\d)厅(\d)卫',
-    'floor':r'(\d+)层.*?(\d+)层',
-    'rent_type':r'(.租).*(.+?卧)',
-    'payment':r'付(.)押(.)',
-    'district_block':r'(.+?)\s+\-\s+(.+)',
-    'longi':r'.*____json4fe\.lon\s?=\s?\'(-?\d+\.\d+)\';',
-    'lati':r'.*____json4fe\.lat\s?=\s?\'(-?\d+\.\d+)\';',
-    'city':r'.*var\s+city_name\s?=\s?\'(.*)\';',
-    'price':r'(\d+).*?(\d+)',
-    'configure':r'[^\r\n\s]+',
+    'number': r'(\d+)',
+    'yuan': r'(\d+)元',
+    'huxing': r'(\d)室(\d)厅(\d)卫',
+    'floor': r'(\d+)层.*?(\d+)层',
+    'rent_type': r'(.租).*(.+?卧)',
+    'payment': r'付(.)押(.)',
+    'district_block': r'(.+?)\s+\-\s+(.+)',
+    'longi': r'.*____json4fe\.lon\s?=\s?\'(-?\d+\.\d+)\';',
+    'lati': r'.*____json4fe\.lat\s?=\s?\'(-?\d+\.\d+)\';',
+    'city': r'.*var\s+city_name\s?=\s?\'(.*)\';',
+    'price': r'(\d+).*?(\d+)',
+    'configure': r'[^\r\n\s]+',
 }
+
 
 class Pinpai58Spider(scrapy.Spider):
     name = 'pinpai58'
     allowed_domains = ['58.com']
-    start_urls = ['http://sh.58.com/pinpaigongyu/']
+    start_urls = []
+    custom_settings = {
+        'CLOSESPIDER_ERRORCOUNT': 20,
+        'DOWNLOAD_DELAY': 1.26,
+        'CONCURRENT_REQUESTS': 8,
+    }
+    total_page = 100
 
     def start_requests(self):
-        for i in range(200,300):
-            yield scrapy.Request('http://sh.58.com/pinpaigongyu/pn/'+str(i)+'/', self.parse)
+        for i in range(200, 300):
+            yield scrapy.Request('http://sh.58.com/pinpaigongyu/pn/' + str(i) + '/', self.parse)
 
     def parse_(self, response):
         '''
@@ -44,81 +51,49 @@ class Pinpai58Spider(scrapy.Spider):
         解析内容页链接
         '''
         for page_link in response.css("ul.list li a::attr(href)").extract():
-            yield response.follow(page_link,self.parse_page)
+            yield response.follow(page_link, self.parse_page)
 
     def parse_page(self, response):
         '''
         解析内容
-        ''' 
+        '''
         print(response.url)
         house = HouseItem()
-        #base info
+        # base info
         house['source_from'] = self.name
-        #通过字段判断，该房源是集中式公寓品牌页面还是普通页面
+
+        # 通过字段判断，该房源是集中式公寓品牌页面还是普通页面
         special_title = response.css('p.head-title::text').extract_first()
         if special_title:
-            return self.parse_spacial_page(response,house)
+            return self.parse_spacial_page(response, house)
         else:
-            return self.parse_normal_page(response,house)
-        house['title'] = response.css("div.basic-title a::text").extract_first()
-        house['apartment'] = house['title']
-        house['rental'] = response.css("div.house-text-Akey li.price::text").extract_first()
-        house['room_area'] = response.css("div.house-text-Akey li.cent::text").extract_first()
-        house['orientation'] = response.css("div.house-text-Akey li")[2].css("::text").extract_first()
-        house['city'] = response.css('script').re_first(REG['city'])
-
-        house['traffic'] = response.css("div.house-text-list dd::text").extract_first()
-        house['room_num'],house['hall_num'],house['bathroom_num'] = response.css("div.house-text-list dd::text")[1].re(REG['huxing'])
-        house['floor'],house['building_floor'] = response.css("div.house-text-list dd")[2].css("::text").re(REG['floor'])
-
-        rent_type_string = trim(response.css("div.house-text-list dd")[3].css("::text").extract_first())
-        if rent_type_string.find('-') != -1:
-            rent_type,bedroom_type = response.css("div.house-text-list dd")[3].css("::text").re(REG['rent_type'])
-            house['rent_type'],house['bedroom_type'] = v2k('rent_type',trim(rent_type)),v2k('bedroom_type',bedroom_type)
-        else:
-            house['rent_type'] = v2k('rent_type',trim(rent_type_string))
-
-        payment_rental,payment_deposit = response.css("div.house-text-list dd")[4].css("::text").re(REG['payment'])
-        house['payment_rental'],house['payment_deposit'] = chinese_to_arabic(payment_rental),chinese_to_arabic(payment_deposit)
-
-        house['district'],house['block'] = response.css("div.house-text-list dd")[5].css('a::text').extract()
-        house['address'] = response.css("div.house-text-list dd")[6].css('::text').extract_first()
-
-        #pictures
-        house['pictures'] = response.css('div.imagesPreviewer .i-images img::attr(data-src)').extract()
-
-        #longti,lati
-        house['longi'] = response.css('script').re_first(REG['longi'])
-        house['lati'] = response.css('script').re_first(REG['lati'])
-
-        #falicities
-        house['private_falicities'] = [dv2k('baletu','config',fal) for fal in response.css('div#privateFalicities li img::attr(alt)').extract()]
-        house['public_falicities'] = [dv2k('baletu','config',fal) for fal in response.css('div#publicFalicities li img::attr(alt)').extract()]
-
-
+            return self.parse_normal_page(response, house)
         yield house
 
-    def parse_spacial_page(self,response,house):
+    def parse_spacial_page(self, response, house):
         house['title'] = response.css('p.head-title::text').extract_first()
         house['brand'] = house['title']
-        house['rent_type'] = 3 #公寓
+        house['rent_type'] = 3  # 公寓
         house['branch'] = response.css('p.head-address::text').extract_first()
         house['style'] = response.css('div.house-title div.housedetail span.bt::text').extract_first()
-        house['empty_house_num'] = response.css('div.house-title div.housedetail span.houseNum::text').re_first(REG['number'])
+        house['empty_house_num'] = response.css('div.house-title div.housedetail span.houseNum::text').re_first(
+            REG['number'])
         house['features'] = response.css('ul.tags-list li.tag::text').extract()
-        house['rental'],house['rental_limit'] = response.css('div.detailMoney span.price::text').re(REG['price'])
-        
-        payment_rental,payment_deposit = response.css('div.detailMoney span.deposit::text').re(REG['payment'])
-        house['payment_rental'],house['payment_deposit'] = chinese_to_arabic(payment_rental),chinese_to_arabic(payment_deposit)
-        house['room_num'],house['hall_num'],house['bathroom_num'] = response.css("div.detailHX span::text").re(REG['huxing'])
+        house['rental'], house['rental_limit'] = response.css('div.detailMoney span.price::text').re(REG['price'])
+
+        payment_rental, payment_deposit = response.css('div.detailMoney span.deposit::text').re(REG['payment'])
+        house['payment_rental'], house['payment_deposit'] = chinese_to_arabic(payment_rental), chinese_to_arabic(
+            payment_deposit)
+        house['room_num'], house['hall_num'], house['bathroom_num'] = response.css("div.detailHX span::text").re(
+            REG['huxing'])
         house['room_area'] = response.css("div.detailArea span::text").re(REG['number'])
         house['orientation'] = response.css("div.detailCX span::text").extract_first()
         house['address'] = response.css("div.detailAdress span::text").extract_first()
-        
+
         house['content'] = response.css("div.describe-descri p.desc::text").extract_first()
         house['private_falicities'] = response.css("div.house-configure li::text").re(REG['configure'])
-        
-        #longti,lati
+
+        # longti,lati
         house['longi'] = response.css('script').re_first(REG['longi'])
         house['lati'] = response.css('script').re_first(REG['lati'])
         yield house

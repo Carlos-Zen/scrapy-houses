@@ -9,23 +9,23 @@ import scrapy
 
 
 class HouseItem(scrapy.Item):
-
     title = scrapy.Field()
     content = scrapy.Field()
     brand = scrapy.Field()
     branch = scrapy.Field()
     style = scrapy.Field()
-    empty_house_num = scrapy.Field() # 集中式
+    empty_house_num = scrapy.Field()  # 集中式
     province = scrapy.Field()
     city = scrapy.Field()
     district = scrapy.Field()
     block = scrapy.Field()
     address = scrapy.Field()
     lati = scrapy.Field()
-    longi =scrapy.Field()
+    longi = scrapy.Field()
+    position = scrapy.Field()
     apartment = scrapy.Field()
-    rent_type = scrapy.Field() # scrapy.Field()整租/ 2合租/ 3公寓
-    bedroom_type = scrapy.Field() # 主卧：scrapy.Field()，次卧：2
+    rent_type = scrapy.Field()  # scrapy.Field()整租/ 2合租/ 3公寓
+    bedroom_type = scrapy.Field()  # 主卧：scrapy.Field()，次卧：2
     room_num = scrapy.Field()
     hall_num = scrapy.Field()
     bathroom_num = scrapy.Field()
@@ -34,15 +34,16 @@ class HouseItem(scrapy.Item):
     rental = scrapy.Field()
     rental_limit = scrapy.Field()
     deposit = scrapy.Field()
-    payment_deposit = scrapy.Field() #付款方式押金月份
-    payment_rental = scrapy.Field() #付款方式租金月份
-    orientation = scrapy.Field() #朝向
+    payment_deposit = scrapy.Field()  # 付款方式押金月份
+    payment_rental = scrapy.Field()  # 付款方式租金月份
+    orientation = scrapy.Field()  # 朝向
     deroration = scrapy.Field()
-    room_area = scrapy.Field() #面积
+    room_area = scrapy.Field()  # 面积
     house_area = scrapy.Field()
     exclusive_bathroom = scrapy.Field()
-    exclusive_balcony = scrapy.Field() 
+    exclusive_balcony = scrapy.Field()
     publish_date = scrapy.Field()
+    crawl_date = scrapy.Field()
     pictures = scrapy.Field()
     source_from = scrapy.Field()
     publisher = scrapy.Field()
