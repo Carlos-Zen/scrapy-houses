@@ -116,12 +116,43 @@ USER_AGENTS = [
 
 SPLASH_URL = 'http://10.18.98.134:8050'
 
-#mongodb
+# mongodb
 MONGO_URI = 'mongodb://10.6.52.147:27017'
 MONGO_DATABASE = 'house'
+MONGO_COLLECTION_PRE = 'house_%s'
+MONGO_DATABASE_COLLISION = 'house_collision'
+MONGO_COLLECTION_COLLISION = 'collision'
 
-#PROXIES
+# PROXIES
 PROXY_LIST = ['10.6.52.147:3128']
 
-#CONCURRENT
-CONCURRENT_REQUESTS_PER_DOMAIN
+# duplate control
+DUPS_LIMIT = 100
+
+# city and start urls
+CITYS = {
+            'shanghai': '上海',
+            'beijing': '北京',
+            'chengdu': '成都',
+            'chongqing': '重庆',
+            'hangzhou': '杭州',
+            'wuhan': '武汉',
+            'xian': '西安',
+            'zhengzhou': '郑州',
+            'suzhou': '苏州',
+            'shenzhen': '深圳',
+            'guangzhou': '广州',
+}
+START_URLS = {
+    'baletu': [
+        'http://sh.baletu.com/zhaofang/',
+        'http://bj.baletu.com/zhaofang/',
+        'http://cd.baletu.com/zhaofang/',
+        'http://cq.baletu.com/zhaofang/',
+        'http://wh.baletu.com/zhaofang/',
+        'http://xa.baletu.com/zhaofang/',
+        'http://zz.baletu.com/zhaofang/',
+        'http://hz.baletu.com/zhaofang/',
+        'http://suzhou.baletu.com/zhaofang/'
+    ],
+}
