@@ -33,12 +33,12 @@ class BaletuSpider(scrapy.Spider):
     allowed_domains = ['baletu.com']
     start_urls = []
     custom_settings = {
-        'CLOSESPIDER_ERRORCOUNT': 20
+        'CLOSESPIDER_ERRORCOUNT': 200
     }
     total_page = 100
 
     def start_requests(self):
-        self.start_urls = self.settings.get('START_URLS')['baletu']
+        self.start_urls = self.settings.get('START_URLS')[self.name]
         for url in self.start_urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -47,15 +47,9 @@ class BaletuSpider(scrapy.Spider):
         解析列表分页
         '''
         self.total_page = int(response.css('script').re_first(REG['total_number']))
-        for url in self.start_urls:
-            for i in range(self.total_page):
-                yield scrapy.Request(url + 'p' + str(i) + '/', self.parse_page_url)
-                # for link in response.css("div.page-numble a.num-unit::attr(href)").extract_first():
-                # link =  response.css("div.page-numble a.num-unit::attr(href)").extract_first()
-                # print(link)
-                # # if link:
-                # yield response.follow(self.start_urls[0],self.parse_page_url)
-                # return self.parse_page_url(response)
+        if self.settings.get('CRAWL_PAGE', 0) > 0: self.total_page = self.settings.get('CRAWL_PAGE')
+        for i in range(self.total_page):
+            yield scrapy.Request(response.url + 'p' + str(i) + '/', self.parse_page_url)
 
     def parse_page_url(self, response):
         '''

@@ -83,7 +83,7 @@ class MongoPipeline(object):
         :return:
         """
         # 重复数据导致spider中断
-        if self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
+        if self.crawler.settings.get('DUPS_STOP') and self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
             self.crawler.engine.close_spider(spider, 'Dups item reach the limie .')
 
         collection_name = self.collection_name % (item['collection'],)

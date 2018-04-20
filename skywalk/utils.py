@@ -43,12 +43,21 @@ def create_uniqe_key(item, addition_values=[]):
     :return:
     """
     keys = DUPS_KEYS
-    tokens = [str(item[k]) for k in keys]
+    tokens = [str(item.get(k,'')) for k in keys]
     tokens.extend(addition_values)
     item_values_str = ''.join(tokens)
     """生成唯一键值"""
     return md5(item_values_str)
 
+
+def get_collection_name(city):
+    """
+    根据城市名获取mongodb的collection name，不存在则返回nocity
+    """
+    for key, value in CITYS.items():
+        if value == city or value == '%s市' % (city,):
+            return key
+    return 'nocity'
 
 def get_collection_name(city):
     """

@@ -27,6 +27,7 @@ CONCURRENT_REQUESTS = 32
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 DOWNLOAD_DELAY = 0.25
+DOWNLOAD_TIMEOUT = 3
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # CONCURRENT_REQUESTS_PER_IP = 16
@@ -63,7 +64,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 EXTENSIONS = {
     'scrapy.extensions.telnet.TelnetConsole': None,
-    # 'scrapy.extensions.closespider.CloseSpider': 100,
+    'scrapy.extensions.closespider.CloseSpider': 100,
 }
 
 # Configure item pipelines
@@ -125,8 +126,11 @@ MONGO_COLLECTION_COLLISION = 'collision'
 # PROXIES
 PROXY_LIST = ['10.6.52.147:3128']
 
+# crawl control
+CRAWL_PAGE = 0
 # duplate control
-DUPS_LIMIT = 100
+DUPS_LIMIT = 0
+DUPS_STOP = False # 去重中断任务
 DUPS_KEYS = ['city', 'district', 'rent_type', 'address', 'orientation', 'room_area', 'floor', 'building_floor',
              'rental', 'lati', 'longi']
 # city and start urls
@@ -142,6 +146,8 @@ CITYS = {
     'suzhou': '苏州',
     'shenzhen': '深圳',
     'guangzhou': '广州',
+    'tianjin': '天津',
+    'nanjing': '南京',
 }
 START_URLS = {
     'baletu': [
@@ -153,9 +159,22 @@ START_URLS = {
         'http://xa.baletu.com/zhaofang/',
         'http://zz.baletu.com/zhaofang/',
         'http://hz.baletu.com/zhaofang/',
-        'http://suzhou.baletu.com/zhaofang/'
+        'http://suzhou.baletu.com/zhaofang/',
+        'http://gz.baletu.com/zhaofang/',
+        'http://nj.baletu.com/zhaofang/',
+        'http://tj.baletu.com/zhaofang/',
     ],
     'pinpai58': [
-
+        'http://sh.58.com/pinpaigongyu/',
+        'http://bj.58.com/pinpaigongyu/',
+        'http://cd.58.com/pinpaigongyu/',
+        'http://cq.58.com/pinpaigongyu/',
+        'http://wh.58.com/pinpaigongyu/',
+        'http://xa.58.com/pinpaigongyu/',
+        'http://zz.58.com/pinpaigongyu/',
+        'http://hz.58.com/pinpaigongyu/',
+        'http://gz.58.com/pinpaigongyu/',
+        'http://nj.58.com/pinpaigongyu/',
+        'http://tj.58.com/pinpaigongyu/',
     ]
 }
