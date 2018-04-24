@@ -68,8 +68,8 @@ class BaletuSpider(scrapy.Spider):
         house['source_from'] = self.name
         house['title'] = response.css("div.basic-title a::text").extract_first()
         house['apartment'] = house['title']
-        house['rental'] = response.css("div.house-text-Akey li.price::text").extract_first()
-        house['room_area'] = response.css("div.house-text-Akey li.cent::text").extract_first()
+        house['rental'] = int(response.css("div.house-text-Akey li.price::text").extract_first())
+        house['room_area'] = int(response.css("div.house-text-Akey li.cent::text").extract_first())
         house['orientation'] = response.css("div.house-text-Akey li")[2].css("::text").extract_first()
         house['city'] = response.css('script').re_first(REG['city'])
 

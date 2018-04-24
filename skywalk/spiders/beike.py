@@ -153,14 +153,15 @@ class BeikeSpider(scrapy.Spider):
             1].css('::text').re(
             REG['huxing'])
         try:
-            house['room_num'] = huxing[0]
-            house['hall_num'] = huxing[1]
-            house['bathroom_num'] = huxing[2]
+            house['room_num'] = int(huxing[0])
+            house['hall_num'] = int(huxing[1])
+            house['bathroom_num'] = int(huxing[2])
         except Exception:
             pass
 
         house['room_area'] = response.css('p.content__article__table span')[3].css('::text').extract_first()
-
+        house['floor'], house['building_floor'] = response.css("div.content__article__info li")[7].css('::text').re(
+            r'(\d+)\/(\d+)')
         house['content'] = response.css("div#desc p.threeline::text").extract_first()
 
 

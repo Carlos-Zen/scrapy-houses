@@ -95,14 +95,20 @@ class Pinpai58Spider(scrapy.Spider):
         house['empty_house_num'] = response.css('div.house-title div.housedetail span.houseNum::text').re_first(
             REG['number'])
         house['features'] = response.css('ul.tags-list li.tag::text').extract()
-        house['rental'], house['rental_limit'] = response.css('div.detailMoney span.price::text').re(REG['price'])
+        prices = response.css('div.detailMoney span.price::text').re(REG['price'])
+
+        try:
+            house['rental'] = int(prices[0])
+            house['rental_limit'] = int(prices[1])
+        except Exception:
+            pass
 
         payment_rental, payment_deposit = response.css('div.detailMoney span.deposit::text').re(REG['payment'])
         house['payment_deposit'],house['payment_rental'] = chinese_to_arabic(payment_rental), chinese_to_arabic(
             payment_deposit)
         house['room_num'], house['hall_num'], house['bathroom_num'] = response.css("div.detailHX span::text").re(
             REG['huxing'])
-        house['room_area'] = response.css("div.detailArea span::text").re_first(REG['number'])
+        house['room_area'] = int(response.css("div.detailArea span::text").re_first(REG['number']))
         house['orientation'] = response.css("div.detailCX span::text").extract_first()
         house['address'] = response.css("div.detailAddress span::text").extract_first()
 
@@ -141,22 +147,26 @@ class Pinpai58Spider(scrapy.Spider):
             REG['rent_type'])
         house['rent_type'] = v2k('rent_type', rent_type)
         house['features'] = response.css('ul.tags-list li.tag::text').extract()
-        house['rental'] = response.css('div.detail_header span.price::text').extract_first()
+        house['rental'] = int(response.css('div.detail_header span.price::text').extract_first())
 
-        area = response.css("ul.house-info-list li")[0].re_first(REG['number'])
+        area = int(response.css("ul.house-info-list li")[0].re_first(REG['number']))
         house['room_area'] = area
         if rent_type == '整租':
             house['house_area'] = area
-        house['room_num'], house['hall_num'], house['bathroom_num'] = response.css("ul.house-info-list li")[1].css(
-            'span').re(
-            REG['huxing'])
-
+        huxing = response.css("ul.house-info-list li")[1].css('span').re(REG['huxing'])
+        try:
+            house['room_num'] = int(huxing[0])
+            house['hall_num'] = int(huxing[1])
+            house['bathroom_num'] = int(huxing[2])
+        except Exception:
+            pass
         house['orientation'] = response.css("ul.house-info-list li")[1].css('span').css('::text').re_first(
             r'.*?\s+(.*?)\s+')
         house['floor'], house['building_floor'] = response.css("ul.house-info-list li")[2].css('span').css('::text').re(
             r'(\d+)\/(\d+)')
 
         house['address'] = response.css("ul.house-info-list li")[3].css('span').css('::text').extract_first()
+
         try:
             house['traffic'] = response.css("ul.house-info-list li")[4].css('span').css('::text').extract_first()
         except Exception:
