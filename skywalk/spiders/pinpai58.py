@@ -31,7 +31,7 @@ class Pinpai58Spider(scrapy.Spider):
         'DOWNLOAD_DELAY': 0.68,
         'CONCURRENT_REQUESTS': 1,
     }
-    total_page = 500
+    total_page = 100
 
     def start_requests(self):
         self.start_urls = self.settings.get('START_URLS')[self.name]
