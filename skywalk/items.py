@@ -54,3 +54,4 @@ class HouseItem(scrapy.Item):
     features = scrapy.Field()
     uniqe_key_no_date = scrapy.Field()
     collection = scrapy.Field()
+    multi = scrapy.Field() # 一楼多间，一房多间

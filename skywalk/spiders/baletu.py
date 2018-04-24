@@ -107,7 +107,10 @@ class BaletuSpider(scrapy.Spider):
         # longti,lati
         house['longi'] = response.css('script').re_first(REG['longi'])
         house['lati'] = response.css('script').re_first(REG['lati'])
-        house['position'] = [house['longi'], house['lati']]
+        house['position'] = {
+                'type': 'Point',
+                'coordinates': [float(house['longi']), float(house['lati'])]
+            }
 
         # falicities
         house['private_falicities'] = [dv2k('baletu', 'config', fal) for fal in

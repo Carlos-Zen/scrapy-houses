@@ -176,5 +176,19 @@ START_URLS = {
         'http://gz.58.com/pinpaigongyu/',
         'http://nj.58.com/pinpaigongyu/',
         'http://tj.58.com/pinpaigongyu/',
-    ]
+    ],
+    'ke': [
+        'http://sh.zu.ke.com/zufang/',
+        'http://bj.zu.ke.com/zufang/',
+        'http://cd.zu.ke.com/zufang/',
+        'http://cq.zu.ke.com/zufang/',
+        'http://wh.zu.ke.com/zufang/',
+        'http://xa.zu.ke.com/zufang/',
+        'http://zz.zu.ke.com/zufang/',
+        'http://hz.zu.ke.com/zufang/',
+        'http://gz.zu.ke.com/zufang/',
+        'http://nj.zu.ke.com/zufang/',
+        'http://tj.zu.ke.com/zufang/',
+    ],
+
 }

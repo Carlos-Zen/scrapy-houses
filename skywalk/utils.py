@@ -22,7 +22,7 @@ def trim(string):
     """
     remove \n,space
     """
-    string = string.replace("\n", '').replace(' ', '')
+    string = string.replace("\n", '').replace(' ', '').replace("\r", '')
     return string
 
 

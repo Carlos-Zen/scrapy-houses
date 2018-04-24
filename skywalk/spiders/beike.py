@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 import scrapy
 from skywalk.items import *
 from skywalk.utils import *
@@ -17,21 +19,21 @@ REG = {
     'lati': r'.*____json4fe\.lat\s?=\s?\'(-?\d+\.\d+)\';',
     'city': r'.*var\s+city_name\s?=\s?\'(.*)\';',
     'price': r'(\d+).*?(\d+)',
-    'configure': r'[^\r\n\s]+',
+    'norns': r'[^\r\n\s]+',
     'rm_url_params': r'(.*)\?.*'
 }
 
 
-class Pinpai58Spider(scrapy.Spider):
-    name = 'pinpai58'
-    allowed_domains = ['58.com']
+class BeikeSpider(scrapy.Spider):
+    name = 'beike'
+    allowed_domains = ['ke.com']
     start_urls = []
     custom_settings = {
         # 'CLOSESPIDER_ERRORCOUNT': 100,
         'DOWNLOAD_DELAY': 0.68,
-        'CONCURRENT_REQUESTS': 1,
+        # 'CONCURRENT_REQUESTS': 1,
     }
-    total_page = 500
+    total_page = 200
 
     def start_requests(self):
         self.start_urls = self.settings.get('START_URLS')[self.name]
@@ -44,36 +46,28 @@ class Pinpai58Spider(scrapy.Spider):
         '''
         if self.settings.get('CRAWL_PAGE') > 0: self.total_page = self.settings.get('CRAWL_PAGE')
         for i in range(1,self.total_page):
-            yield scrapy.Request(response.url + 'pn/' + str(i) + '/', self.parse_page_url)
+            yield scrapy.Request(response.url + 'pg' + str(i) + '/', self.parse_page_url)
 
     def parse_page_url(self, response):
         '''
         解析内容页链接
         '''
-        for page_link in response.css("ul.list li a::attr(href)").extract():
+        for page_link in response.css("div.content__list a.link::attr(href)").extract():
             yield response.follow(page_link, self.parse_page)
 
     def parse_page(self, response):
         '''
         解析内容
         '''
-        house = HouseItem()
-        house['source_from'] = self.name
 
+        # 通过url判断，该房源是集中式公寓品牌页面还是普通页面,区分
 
-        # 通过字段判断，该房源是集中式公寓品牌页面还是普通页面,区分
-        special_title = response.css('p.head-title::text').extract_first()
-        if special_title:
-            self.parse_spacial_page(response, house)
+        if response.url.find('apartment') is not -1:
+            #集中式公寓单页面返回多个房型
+            for house in self.parse_apartment_page(response):
+                yield house
         else:
-            self.parse_normal_page(response, house)
-
-        # date and unique_key
-        house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
-        house['uniqe_key_no_date'] = create_uniqe_key(house)
-        # collection_name
-        house['collection'] = get_collection_name(house['city'])
-        yield house
+            yield self.parse_normal_page(response)
 
     def parse_spacial_page(self, response, house):
         """
@@ -82,53 +76,57 @@ class Pinpai58Spider(scrapy.Spider):
         :param house:
         :return:
         """
-        house['title'] = response.css('p.head-title::text').extract_first()
-        house['brand'] = house['title']
-        house['rent_type'] = 3  # 公寓
-        house['branch'] = response.css('p.head-address::text').extract_first()
+        houses_json_string = response.css('script').re_first(r'JSON\.stringify\((.*)\)\)')
+        houses = json.loads(houses_json_string)
+        for one_house in houses['layout_list']:
 
-        house['city'] = response.css('div.curmbar a')[0].css('::text').re_first(r'(.*)公寓')
-        house['district'] = response.css('div.curmbar a')[1].css('::text').re_first(r'(.*)公寓')
-        house['block'] = response.css('div.curmbar a')[2].css('::text').re_first(r'(.*)公寓')
+            house = HouseItem()
+            house['rent_type'] = 3  # 公寓
+            house['source_from'] = self.name
+            house['branch'] = response.css('p.content__aside--title span::text').extract_first()
+            house['brand'] = houses['apartment_name']
+            house['style'] = one_house['name']
+            # title = 品牌 + 分店 + 房型
+            house['title'] = house['brand'] + response.css('p.content__aside--title span::text').extract_first() + house['style']
 
-        house['style'] = response.css('div.house-title div.housedetail span.bt::text').extract_first()
-        house['empty_house_num'] = response.css('div.house-title div.housedetail span.houseNum::text').re_first(
-            REG['number'])
-        house['features'] = response.css('ul.tags-list li.tag::text').extract()
-        house['rental'], house['rental_limit'] = response.css('div.detailMoney span.price::text').re(REG['price'])
+            house['rental'], house['rental_limit'] = one_house['min_price'], one_house['max_price']
+            house['empty_house_num'] = one_house['rentable_num']
+            house['room_area'] = one_house['min_area']
+            house['private_falicities'] = [ f['name'] for f in one_house['facility'] ]
+            house['pictures'] = [ p['picture_url'] for p in one_house['detail_picture'] ]
 
-        payment_rental, payment_deposit = response.css('div.detailMoney span.deposit::text').re(REG['payment'])
-        house['payment_deposit'],house['payment_rental'] = chinese_to_arabic(payment_rental), chinese_to_arabic(
-            payment_deposit)
-        house['room_num'], house['hall_num'], house['bathroom_num'] = response.css("div.detailHX span::text").re(
-            REG['huxing'])
-        house['room_area'] = response.css("div.detailArea span::text").re_first(REG['number'])
-        house['orientation'] = response.css("div.detailCX span::text").extract_first()
-        house['address'] = response.css("div.detailAddress span::text").extract_first()
+            house['city'] = response.css('head title::text').re_first(r'-(.*)贝壳找房')
 
-        house['content'] = trim(response.css("div.describe-descri p.desc::text").extract_first())
-        house['private_falicities'] = response.css("div.house-configure li::text").re(REG['configure'])
-        # pictures
-        house['pictures'] = response.css("ul#leftImg img::attr(src)").re(REG['rm_url_params'])
+            house['address'] = response.css("div.flat__info--desc p.flat__info--subtitle::text").re_first(REG['norns'])
 
-        # longti,lati
-        house['longi'] = response.css('script').re_first(REG['longi'])
-        house['lati'] = response.css('script').re_first(REG['lati'])
-        house['position'] = {
-            'type': 'Point',
-            'coordinates': [float(house['longi']), float(house['lati'])]
-        }
-        month = time.strftime("%Y-%m", time.localtime())
-        house['uniqe_key'] = create_uniqe_key(house, [month])
+            house['content'] = response.css("div.flat__info--desc p.flat__info--description::text").extract_first()
+            house['public_falicities'] = response.css("div.flat__info--facilities li::text").extract()
+            # longti,lati
+            house['longi'] = houses['longitude']
+            house['lati'] = houses['latitude']
+            house['position'] = {
+                'type': 'Point',
+                'coordinates': [float(house['longi']), float(house['lati'])]
+            }
+            month = time.strftime("%Y-%m", time.localtime())
+            house['uniqe_key'] = create_uniqe_key(house, [month])
 
+            # date and unique_key
+            house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
+            house['uniqe_key_no_date'] = create_uniqe_key(house)
+            # collection_name
+            house['collection'] = get_collection_name(house['city'])
+            yield house
 
-    def parse_normal_page(self, response, house):
+    def parse_normal_page(self, response):
         """
         普通页面规则
         :param response:
         :param house:
         :return:
         """
+        house = HouseItem()
+        house['source_from'] = self.name
         house['title'] = response.css('div.housedetail h2::text').extract_first()
         house['brand'] = response.css('div.apartment-info span::text').extract_first()
         house['publish_date'] = response.css('div.tags span::text').re_first(r'.*(\d{4}[-\/]\d{2}[-\/]\d{2})')
@@ -162,7 +160,7 @@ class Pinpai58Spider(scrapy.Spider):
         except Exception:
             pass
 
-        house['content'] = trim(response.css("div.desc-wrap p#desc::text").extract_first())
+        house['content'] = response.css("div.desc-wrap p#desc::text").extract_first()
         house['private_falicities'] = response.css("div.house-setup li::text").re(REG['configure'])
 
         # pictures
@@ -174,3 +172,9 @@ class Pinpai58Spider(scrapy.Spider):
 
         month = time.strftime("%Y-%m", time.strptime(house['publish_date'], "%Y-%m-%d"))
         house['uniqe_key'] = create_uniqe_key(house, [month])
+        # date and unique_key
+        house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
+        house['uniqe_key_no_date'] = create_uniqe_key(house)
+        # collection_name
+        house['collection'] = get_collection_name(house['city'])
+        return house
