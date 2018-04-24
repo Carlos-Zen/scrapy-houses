@@ -127,7 +127,8 @@ MONGO_COLLECTION_COLLISION = 'collision'
 PROXY_LIST = ['10.6.52.147:3128']
 
 # crawl control
-CRAWL_PAGE = 0
+CRAWL_PAGE = 200
+
 # duplate control
 DUPS_LIMIT = 0
 DUPS_STOP = False # 去重中断任务

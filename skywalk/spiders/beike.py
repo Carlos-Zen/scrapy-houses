@@ -33,7 +33,7 @@ class BeikeSpider(scrapy.Spider):
         'DOWNLOAD_DELAY': 0.68,
         # 'CONCURRENT_REQUESTS': 1,
     }
-    total_page = 2
+    total_page = 200
 
     def start_requests(self):
         self.start_urls = self.settings.get('START_URLS')[self.name]
