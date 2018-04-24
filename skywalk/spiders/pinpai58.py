@@ -28,7 +28,7 @@ class Pinpai58Spider(scrapy.Spider):
     start_urls = []
     custom_settings = {
         # 'CLOSESPIDER_ERRORCOUNT': 100,
-        'DOWNLOAD_DELAY': 0.68,
+        'DOWNLOAD_DELAY': 2.68,
         'CONCURRENT_REQUESTS': 1,
     }
     total_page = 100
