@@ -177,7 +177,7 @@ START_URLS = {
         'http://nj.58.com/pinpaigongyu/',
         'http://tj.58.com/pinpaigongyu/',
     ],
-    'ke': [
+    'beike': [
         'http://sh.zu.ke.com/zufang/',
         'http://bj.zu.ke.com/zufang/',
         'http://cd.zu.ke.com/zufang/',
