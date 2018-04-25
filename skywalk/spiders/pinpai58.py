@@ -180,7 +180,9 @@ class Pinpai58Spider(scrapy.Spider):
         # longti,lati
         house['longi'] = response.css('script').re_first(REG['longi'])
         house['lati'] = response.css('script').re_first(REG['lati'])
-        house['position'] = [house['longi'], house['lati']]
-
+        house['position'] = {
+            'type': 'Point',
+            'coordinates': [float(house['longi']), float(house['lati'])]
+        }
         month = time.strftime("%Y-%m", time.strptime(house['publish_date'], "%Y-%m-%d"))
         house['uniqe_key'] = create_uniqe_key(house, [month])

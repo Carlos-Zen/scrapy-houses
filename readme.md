@@ -54,7 +54,24 @@ db.house_wuhan.createIndex ({"position" : "2dsphere" })
 db.house_xian.createIndex ({"position" : "2dsphere" })
 db.house_zhengzhou.createIndex ({"position" : "2dsphere" })
 
+# full text search index
+db.house_shanghai.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_beijing.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_chengdu.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_chongqing.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_guangzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_hangzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_nanjing.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_suzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_tianjin.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_wuhan.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_xian.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_zhengzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
 
+#full text search demo
+db.house_shanghai.find({$test:{$search:"上海"}})
+
+# geo search demo
 db.runCommand( {
    geoNear: "house_shanghai",
    near: { type: "Point" , coordinates: [121.671597,31.274732] } ,
