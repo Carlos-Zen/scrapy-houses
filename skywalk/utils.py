@@ -67,3 +67,6 @@ def get_collection_name(city):
         if value == city or value == '%s市' % (city,):
             return key
     return 'nocity'
+
+def find_bathroom(str):
+    str.find()

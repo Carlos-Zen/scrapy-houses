@@ -81,3 +81,19 @@ db.runCommand( {
 } )
 
 SON([('geoNear','house_shanghai'),('near',SON([('type','Point'),('coordinates',[121.671597,31.274732] )])),('maxDistance',10),('spherical',True)])
+
+
+# 数量统计
+db.house_shanghai.count()
+db.house_beijing.count()
+db.house_chengdu.count()
+db.house_chongqing.count()
+db.house_guangzhou.count()
+db.house_hangzhou.count()
+db.house_nanjing.count()
+db.house_shanghai.count()
+db.house_suzhou.count()
+db.house_tianjin.count()
+db.house_wuhan.count()
+db.house_xian.count()
+db.house_zhengzhou.count()

@@ -127,7 +127,7 @@ MONGO_COLLECTION_COLLISION = 'collision'
 PROXY_LIST = ['10.6.52.147:3128']
 
 # crawl control
-CRAWL_PAGE = 200
+CRAWL_PAGE = 100
 # CLOSESPIDER_ERRORCOUNT = 300
 # duplate control
 DUPS_LIMIT = 0
@@ -191,5 +191,18 @@ START_URLS = {
         'http://nj.zu.ke.com/zufang/',
         'http://tj.zu.ke.com/zufang/',
     ],
+    'ziroom': [
+        'http://sh.ziroom.com/z/nl/z3.html',
+        'http://www.ziroom.com/z/nl/z3.html',
+        'http://cd.ziroom.com/z/nl/z3.html',
+        'http://cq.ziroom.com/z/nl/z3.html',
+        'http://wh.ziroom.com/z/nl/z3.html',
+        'http://xa.ziroom.com/z/nl/z3.html',
+        'http://zz.ziroom.com/z/nl/z3.html',
+        'http://hz.ziroom.com/z/nl/z3.html',
+        'http://gz.ziroom.com/z/nl/z3.html',
+        'http://nj.ziroom.com/z/nl/z3.html',
+        'http://tj.ziroom.com/z/nl/z3.html',
+    ]
 
 }
