@@ -160,8 +160,11 @@ class BeikeSpider(scrapy.Spider):
             pass
 
         house['room_area'] = response.css('p.content__article__table span')[3].css('::text').extract_first()
-        house['floor'], house['building_floor'] = response.css("div.content__article__info li")[7].css('::text').re(
+        try:
+            house['floor'], house['building_floor'] = response.css("div.content__article__info li")[7].css('::text').re(
             r'(\d+)\/(\d+)')
+        except Exception:
+            pass
         house['content'] = response.css("div#desc p.threeline::text").extract_first()
 
 
