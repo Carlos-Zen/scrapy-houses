@@ -27,9 +27,9 @@ REG = {
 }
 
 
-class ZiroomSpider(scrapy.Spider):
-    name = 'ziroom'
-    allowed_domains = ['ziroom.com']
+class DankeSpider(scrapy.Spider):
+    name = 'danke'
+    allowed_domains = ['dankegongyu.com']
     start_urls = []
     custom_settings = {
         # 'CLOSESPIDER_ERRORCOUNT': 100,

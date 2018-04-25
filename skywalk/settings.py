@@ -129,7 +129,7 @@ PROXY_LIST = ['10.6.52.147:3128']
 
 # crawl control
 CRAWL_PAGE = 100
-# CLOSESPIDER_ERRORCOUNT = 300
+CLOSESPIDER_ERRORCOUNT = 300
 # duplate control
 DUPS_LIMIT = 200
 DUPS_STOP = False # 去重中断任务
@@ -204,6 +204,19 @@ START_URLS = {
         'http://gz.ziroom.com/z/nl/z3.html',
         'http://nj.ziroom.com/z/nl/z3.html',
         'http://tj.ziroom.com/z/nl/z3.html',
+    ],
+    'danke': [
+        'https://www.dankegongyu.com/room/sh',
+        # 'https://www.dankegongyu.com/room/bj',
+        # 'https://www.dankegongyu.com/room/cd',
+        # 'https://www.dankegongyu.com/room/cq',
+        # 'https://www.dankegongyu.com/room/wh',
+        # 'https://www.dankegongyu.com/room/xa',
+        # 'https://www.dankegongyu.com/room/zz',
+        # 'https://www.dankegongyu.com/room/hz',
+        # 'https://www.dankegongyu.com/room/gz',
+        # 'https://www.dankegongyu.com/room/nj',
+        # 'https://www.dankegongyu.com/room/tj',
     ]
 
 }
