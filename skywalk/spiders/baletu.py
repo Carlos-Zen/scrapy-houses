@@ -33,7 +33,7 @@ class BaletuSpider(scrapy.Spider):
     allowed_domains = ['baletu.com']
     start_urls = []
     custom_settings = {
-        'CLOSESPIDER_ERRORCOUNT': 200
+        # 'CLOSESPIDER_ERRORCOUNT': 200
     }
     total_page = 100
 
