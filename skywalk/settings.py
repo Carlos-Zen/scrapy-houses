@@ -129,9 +129,9 @@ PROXY_LIST = ['10.6.52.147:3128']
 
 # crawl control
 CRAWL_PAGE = 100
-CLOSESPIDER_ERRORCOUNT = 300
+# CLOSESPIDER_ERRORCOUNT = 300
 # duplate control
-DUPS_LIMIT = 200
+DUPS_LIMIT = 0
 DUPS_STOP = False # 去重中断任务
 DUPS_KEYS = ['city', 'district', 'rent_type', 'address', 'orientation', 'room_area', 'floor', 'building_floor',
              'rental', 'lati', 'longi']
