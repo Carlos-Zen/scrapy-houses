@@ -25,10 +25,10 @@ def update_unique_key(db,col):
     collection = client[db][col]
     for d in collection.find({}):
         # print(d)
-        uk = create_uniqe_key(d, ['2018-04'])
-        ukn = create_uniqe_key(d)
+        uk = uniqe_key(d)
+        hk = house_key(d)
         # print(uk, ukn)
-        collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': {'uniqe_key_no_date': ukn, 'uniqe_key': uk}}, upsert=True)
+        collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': {'house_key': hk, 'uniqe_key': uk}}, upsert=True)
         # break
 
 def delete_dups_row(db,col):
