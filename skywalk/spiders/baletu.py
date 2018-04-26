@@ -120,8 +120,8 @@ class BaletuSpider(scrapy.Spider):
 
         # date and unique_key
         house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
-        month = time.strftime("%Y-%m", time.localtime())
-        house['uniqe_key'] = create_uniqe_key(house, [month])
+        house['uniqe_key'] = uniqe_key(house)
+        house['house_key'] = house_key(house)
         house['uniqe_key_no_date'] = create_uniqe_key(house)
 
         # collection_name

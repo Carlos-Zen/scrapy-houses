@@ -83,15 +83,15 @@ class MongoPipeline(object):
         :return:
         """
         # 重复数据导致spider中断
-        if self.crawler.settings.get('DUPS_STOP') and self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
-            self.crawler.engine.close_spider(spider, 'Dups item reach the limie .')
-
-        collection_name = self.collection_name % (item['collection'],)
-
-        try:
-            self.db[collection_name].insert(dict(item))
-        except DuplicateKeyError:
-            # 重复计数，插入重复库中
-            self.dups_count += 1
-            self.db_collision[self.collision_collection].insert(dict(item))
+        # if self.crawler.settings.get('DUPS_STOP') and self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
+        #     self.crawler.engine.close_spider(spider, 'Dups item reach the limie .')
+        #
+        # collection_name = self.collection_name % (item['collection'],)
+        #
+        # try:
+        #     self.db[collection_name].insert(dict(item))
+        # except DuplicateKeyError:
+        #     # 重复计数，插入重复库中
+        #     self.dups_count += 1
+        #     self.db_collision[self.collision_collection].insert(dict(item))
         return item

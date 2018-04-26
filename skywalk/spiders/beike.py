@@ -112,9 +112,8 @@ class BeikeSpider(scrapy.Spider):
                 'type': 'Point',
                 'coordinates': [float(house['longi']), float(house['lati'])]
             }
-            month = time.strftime("%Y-%m", time.localtime())
-            house['uniqe_key'] = create_uniqe_key(house, [month])
-
+            house['uniqe_key'] = uniqe_key(house)
+            house['house_key'] = house_key(house)
             # date and unique_key
             house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
             house['uniqe_key_no_date'] = create_uniqe_key(house)
@@ -178,9 +177,8 @@ class BeikeSpider(scrapy.Spider):
         }
 
         house['publish_date'] = response.css('div.content__article__info li')[1].css('::text').re_first(r'.*(\d{4}[-\/]\d{2}[-\/]\d{2})')
-        month = time.strftime("%Y-%m", time.strptime(house['publish_date'], "%Y-%m-%d"))
-        house['uniqe_key'] = create_uniqe_key(house, [month])
-
+        house['uniqe_key'] = uniqe_key(house)
+        house['house_key'] = house_key(house)
         # date and unique_key
         house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
         house['uniqe_key_no_date'] = create_uniqe_key(house)

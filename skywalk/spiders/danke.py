@@ -15,8 +15,7 @@ REG = {
     'rent_type': r'(.租)',
     'payment': r'押(.)付(.)',
     'district_block': r'(.+?)\s+\-\s+(.+)',
-    'longi': r'.*longitude\s?:\s?\'(-?\d+\.\d+)\'',
-    'lati': r'.*latitude\s?:\s?\'(-?\d+\.\d+)\'',
+    'coodinates': r'.*var\s+map\s?=\s?new\sBaiduDetailMap\((.*?)\,(.*?)\,.*',
     'city': r'.*var\s+city_name\s?=\s?\'(.*)\';',
     'price': r'(\d+).*?(\d+)',
     'norns': r'[^\r\n\s]+',
@@ -36,7 +35,7 @@ class DankeSpider(scrapy.Spider):
         'DOWNLOAD_DELAY': 0.28,
         # 'CONCURRENT_REQUESTS': 1,
     }
-    total_page = 2
+    total_page = 200
 
     def start_requests(self):
         self.start_urls = self.settings.get('START_URLS')[self.name]
@@ -55,11 +54,11 @@ class DankeSpider(scrapy.Spider):
         '''
         解析内容页链接
         '''
-        for page_link in response.css("ul#houseList a.t1::attr(href)").extract():
-            yield response.follow(page_link, self.parse_page)
-            # test
-        # for page_link in ['http://sh.ziroom.com/z/vr/61178049.html']:
+        # for page_link in response.css("div.r_ls_box div.r_lbx a.rimg::attr(href)").extract():
         #     yield response.follow(page_link, self.parse_page)
+        # test
+        for page_link in ['https://www.dankegongyu.com/room/1425952751.html']:
+            yield response.follow(page_link, self.parse_page)
 
     def parse_page(self, response):
         """
@@ -73,23 +72,25 @@ class DankeSpider(scrapy.Spider):
         house['source_from'] = self.name
         house['brand'] = self.name
         # title = 品牌 + 分店 + 房型
-        house['title'] = trim(response.css('div.room_name  h2::text').extract_first())
+        house['title'] = trim(response.css('div.room-detail  div.room-name h1::text').extract_first())
 
-        house['city'] = response.css('span#curCityName::text').extract_first()
-        house['district'] = response.css('div.node_infor a')[1].css('::text').re_first(r'(.*).租')
-        house['block'] = response.css('div.node_infor a')[2].css('::text').re_first(r'(.*)公寓出租')
-        house['apartment'] = response.css('div.node_infor a')[3].css('::text').re_first(r'(.*)租房信息')
+        house['city'] = response.css('span#dropdownMenu1::text').extract_first()
+        house['district'] = response.css('div.detail-roombox a')[0].css('::text').extract_first()
+        house['block'] = response.css('div.detail-roombox a')[1].css('::text').extract_first()
+        house['apartment'] = response.css('div.detail-roombox a')[2].css('::text').extract_first()
 
-        house['rental'] = int(response.css('span#room_price::text').re_first(REG['number']))
+        house['rental'] = int(response.css('div.room-price-sale::text').extract_first())
 
-        house['pictures'] = response.css("ul.lof-main-wapper img::attr(src)").extract()
+        house['pictures'] = response.css("div.carousel-inner img::attr(src)").extract()
 
-        rent_type = response.css('div.node_infor a')[1].css('::text').re_first(r'.*(.租)')
+        rent_type = response.css('b.methodroom-rent::text').extract_first() + '租'
         house['rent_type'] = v2k('rent_type', rent_type)
 
-        house['room_area'] = int(response.css('ul.detail_room li')[0].css('::text').re_first(REG['number']))
-        house['orientation'] = response.css('ul.detail_room li')[1].css('::text').re_first(REG['orientation'])
-        huxing = response.css('ul.detail_room li')[2].css('::text').re(
+        house['room_area'] = int(
+            response.css('div.room-detail-box div.room-list label')[0].css('::text').re_first(REG['number']))
+        house['orientation'] = response.css('div.room-detail-box div.room-list label')[4].css('::text').re_first(
+            r'：(.*)')
+        huxing = response.css('div.room-detail-box div.room-list label')[2].css('::text').re(
             REG['huxing'])
         try:
             house['room_num'] = int(huxing[0])
@@ -99,33 +100,37 @@ class DankeSpider(scrapy.Spider):
             pass
 
         try:
-            house['floor'], house['building_floor'] = response.css('ul.detail_room li')[3].css('::text').re(
+            house['floor'], house['building_floor'] = response.css('div.room-detail-box div.room-list label')[5].css(
+                '::text').re(
                 r'(\d+)\/(\d+)')
         except Exception:
             pass
-
-        house['traffic'] = trim(response.css('ul.detail_room li')[4].css('span::text').extract_first())
-
-        house['content'] = response.css("div.aboutRoom").extract_first()
-        house['features'] = response.css("p.room_tags span::text").extract()
         try:
-            if len(response.css("p.room_tags span::text").re(REG['bathroom'])) > 0: house['exclusive_bathroom'] = 1
-            if len(response.css("p.room_tags span::text").re(REG['balcony'])) > 0: house['exclusive_balcony'] = 1
+            house['traffic'] = response.css('div.room-detail-box div.room-list label')[7].css('::text').re(r'：(.*)')
+        except Exception:
+            pass
+        try:
+            house['features'] = response.css("div.room-detail-right div.room-title span::text").extract()
+            if len(response.css("div.room-detail-right div.room-title span::text").re(REG['bathroom'])) > 0: house[
+                'exclusive_bathroom'] = 1
+            if len(response.css("div.room-detail-right div.room-title span::text").re(REG['balcony'])) > 0: house[
+                'exclusive_balcony'] = 1
         except Exception:
             pass
 
-        house['public_falicities'] = response.css("ul.configuration li::text").extract()
         # longti,lati
-        house['longi'] = response.css('input#mapsearchText::attr(data-lng)').extract_first()
-        house['lati'] = response.css('input#mapsearchText::attr(data-lat)').extract_first()
+        house['longi'], house['lati'] = response.css('script').re(
+            r'.*var\s+map\s?=\s?new\sBaiduDetailMap\((.*?)\,(.*?)\,.*')[:2]
         house['position'] = {
             'type': 'Point',
             'coordinates': [float(house['longi']), float(house['lati'])]
         }
+        house['payment_deposit'] = 1
+        house['payment_rental'] = 1
+        house['service_fee'] = int(house['rental'] * 1.05)
 
-        month = time.strftime("%Y-%m", time.localtime())
-        house['uniqe_key'] = create_uniqe_key(house, [month])
-
+        house['uniqe_key'] = uniqe_key(house)
+        house['house_key'] = house_key(house)
         # date and unique_key
         house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
         house['uniqe_key_no_date'] = create_uniqe_key(house)

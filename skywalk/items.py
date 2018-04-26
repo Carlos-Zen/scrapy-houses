@@ -34,6 +34,7 @@ class HouseItem(scrapy.Item):
     rental = scrapy.Field()
     rental_limit = scrapy.Field()
     deposit = scrapy.Field()
+    service_fee = scrapy.Field()
     payment_deposit = scrapy.Field()  # 付款方式押金月份
     payment_rental = scrapy.Field()  # 付款方式租金月份
     orientation = scrapy.Field()  # 朝向
@@ -48,10 +49,11 @@ class HouseItem(scrapy.Item):
     source_from = scrapy.Field()
     publisher = scrapy.Field()
     traffic = scrapy.Field()
-    uniqe_key = scrapy.Field()
+    uniqe_key = scrapy.Field() #抓取数据特征，有时间
     private_falicities = scrapy.Field()
     public_falicities = scrapy.Field()
     features = scrapy.Field()
-    uniqe_key_no_date = scrapy.Field()
+    uniqe_key_no_date = scrapy.Field()  #抓取数据特征，无时间
+    house_key = scrapy.Field() #房间特征
     collection = scrapy.Field()
     multi = scrapy.Field() # 一楼多间，一房多间

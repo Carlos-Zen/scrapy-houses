@@ -123,8 +123,7 @@ class Pinpai58Spider(scrapy.Spider):
             'type': 'Point',
             'coordinates': [float(house['longi']), float(house['lati'])]
         }
-        month = time.strftime("%Y-%m", time.localtime())
-        house['uniqe_key'] = create_uniqe_key(house, [month])
+        house['uniqe_key'] = uniqe_key(house)
 
 
     def parse_normal_page(self, response, house):
@@ -183,5 +182,5 @@ class Pinpai58Spider(scrapy.Spider):
             'type': 'Point',
             'coordinates': [float(house['longi']), float(house['lati'])]
         }
-        month = time.strftime("%Y-%m", time.strptime(house['publish_date'], "%Y-%m-%d"))
-        house['uniqe_key'] = create_uniqe_key(house, [month])
+        house['uniqe_key'] = uniqe_key(house)
+        house['house_key'] = house_key(house)

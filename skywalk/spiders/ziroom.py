@@ -125,10 +125,13 @@ class ZiroomSpider(scrapy.Spider):
             'type': 'Point',
             'coordinates': [float(house['longi']), float(house['lati'])]
         }
+        # 固定付款方式
+        house['payment_deposit'] = 1
+        house['payment_rental'] = 3
+        house['service_fee'] = int(house['rental'] * 1.2)
 
-        month = time.strftime("%Y-%m", time.localtime())
-        house['uniqe_key'] = create_uniqe_key(house, [month])
-
+        house['uniqe_key'] = uniqe_key(house)
+        house['house_key'] = house_key(house)
         # date and unique_key
         house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
         house['uniqe_key_no_date'] = create_uniqe_key(house)
