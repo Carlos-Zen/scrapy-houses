@@ -103,8 +103,11 @@ class ZiroomSpider(scrapy.Spider):
                 r'(\d+)\/(\d+)')
         except Exception:
             pass
+        try:
+            house['traffic'] = trim(response.css('ul.detail_room li')[4].css('span::text').extract_first())
+        except Exception:
+            pass
 
-        house['traffic'] = trim(response.css('ul.detail_room li')[4].css('span::text').extract_first())
 
         house['content'] = response.css("div.aboutRoom").extract_first()
         house['features'] = response.css("p.room_tags span::text").extract()
