@@ -31,6 +31,7 @@ class BeikeSpider(scrapy.Spider):
     custom_settings = {
         # 'CLOSESPIDER_ERRORCOUNT': 100,
         'DOWNLOAD_DELAY': 0.68,
+        'DUPS_STOP': False
         # 'CONCURRENT_REQUESTS': 1,
     }
     total_page = 200
@@ -158,7 +159,7 @@ class BeikeSpider(scrapy.Spider):
         except Exception:
             pass
 
-        house['room_area'] = response.css('p.content__article__table span')[3].css('::text').extract_first()
+        house['orientation'] = response.css('p.content__article__table span')[3].css('::text').extract_first()
         try:
             house['floor'], house['building_floor'] = response.css("div.content__article__info li")[7].css('::text').re(
             r'(\d+)\/(\d+)')

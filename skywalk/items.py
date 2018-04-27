@@ -25,7 +25,7 @@ class HouseItem(scrapy.Item):
     longi = scrapy.Field()
     position = scrapy.Field()
     apartment = scrapy.Field()
-    rent_type = scrapy.Field()  # scrapy.Field()整租/ 2合租/ 3公寓
+    rent_type = scrapy.Field()  # scrapy.Field()1整租/ 2合租/ 3公寓
     bedroom_type = scrapy.Field()  # 主卧：scrapy.Field()，次卧：2
     room_num = scrapy.Field()
     hall_num = scrapy.Field()

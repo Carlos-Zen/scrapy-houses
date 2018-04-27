@@ -44,7 +44,7 @@ def update_unique_key(db,col):
 def update_int(item):
     update = {}
     for key in ['floor','building_floor','rental','rental_limit','service_fee','deposit','payment_deposit','payment_rental','room_area','house_area']:
-        update[key] = item.get(key,0)
+        update[key] = int(item.get(key,0))
     return update
 
 def delete_dups_row(db,col):
