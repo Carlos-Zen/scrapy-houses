@@ -1,3 +1,4 @@
 .idea/
 skywalk/spiders/__pycache__/
 skywalk/__pycache__/
+*.py[cod]

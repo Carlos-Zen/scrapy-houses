@@ -7,6 +7,7 @@
 
 import scrapy
 
+INT_FIELD = ['floor','building_floor','rental','rental_limit','service_fee','deposit','payment_deposit','payment_rental','room_area','house_area']
 
 class HouseItem(scrapy.Item):
     title = scrapy.Field()
@@ -57,3 +58,9 @@ class HouseItem(scrapy.Item):
     house_key = scrapy.Field() #房间特征
     collection = scrapy.Field()
     multi = scrapy.Field() # 一楼多间，一房多间
+
+    def set(self, key, value):
+        self._values[key] = value
+
+    def get(self, key, default=''):
+        return self._values.get(key, default)

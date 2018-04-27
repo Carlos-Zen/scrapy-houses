@@ -128,7 +128,7 @@ MONGO_COLLECTION_COLLISION = 'collision'
 PROXY_LIST = ['10.6.52.147:3128']
 
 # crawl control
-CRAWL_PAGE = 200
+CRAWL_PAGE = 0
 # CLOSESPIDER_ERRORCOUNT = 300
 # duplate control
 DUPS_LIMIT = 0
@@ -209,16 +209,16 @@ START_URLS = {
     ],
     'danke': [
         'https://www.dankegongyu.com/room/sh',
-        # 'https://www.dankegongyu.com/room/bj',
-        # 'https://www.dankegongyu.com/room/cd',
-        # 'https://www.dankegongyu.com/room/cq',
-        # 'https://www.dankegongyu.com/room/wh',
-        # 'https://www.dankegongyu.com/room/xa',
-        # 'https://www.dankegongyu.com/room/zz',
-        # 'https://www.dankegongyu.com/room/hz',
-        # 'https://www.dankegongyu.com/room/gz',
-        # 'https://www.dankegongyu.com/room/nj',
-        # 'https://www.dankegongyu.com/room/tj',
+        'https://www.dankegongyu.com/room/bj',
+        'https://www.dankegongyu.com/room/cd',
+        'https://www.dankegongyu.com/room/cq',
+        'https://www.dankegongyu.com/room/wh',
+        'https://www.dankegongyu.com/room/xa',
+        'https://www.dankegongyu.com/room/zz',
+        'https://www.dankegongyu.com/room/hz',
+        'https://www.dankegongyu.com/room/gz',
+        'https://www.dankegongyu.com/room/nj',
+        'https://www.dankegongyu.com/room/tj',
     ]
 
 }

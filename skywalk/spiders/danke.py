@@ -31,9 +31,7 @@ class DankeSpider(scrapy.Spider):
     allowed_domains = ['dankegongyu.com']
     start_urls = []
     custom_settings = {
-        # 'CLOSESPIDER_ERRORCOUNT': 100,
         'DOWNLOAD_DELAY': 0.28,
-        # 'CONCURRENT_REQUESTS': 1,
     }
     total_page = 200
 
@@ -54,11 +52,11 @@ class DankeSpider(scrapy.Spider):
         '''
         解析内容页链接
         '''
-        # for page_link in response.css("div.r_ls_box div.r_lbx a.rimg::attr(href)").extract():
-        #     yield response.follow(page_link, self.parse_page)
-        # test
-        for page_link in ['https://www.dankegongyu.com/room/1425952751.html']:
+        for page_link in response.css("div.r_ls_box div.r_lbx a.rimg::attr(href)").extract():
             yield response.follow(page_link, self.parse_page)
+        # test
+        # for page_link in ['https://www.dankegongyu.com/room/1425952751.html']:
+        #     yield response.follow(page_link, self.parse_page)
 
     def parse_page(self, response):
         """

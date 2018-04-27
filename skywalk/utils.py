@@ -59,7 +59,7 @@ def uniqe_key(item):
     :return:
     """
     keys = DUPS_KEYS
-    month_token = time.strftime("%Y-", time.localtime()) + hash_month(time.strftime("%m", time.localtime()))
+    month_token = time.strftime("%Y-", time.localtime()) + str(hash_month(time.strftime("%m", time.localtime())))
     keys.append(month_token)
     tokens = [str(item.get(k, '')) for k in keys]
     item_values_str = ''.join(tokens)
