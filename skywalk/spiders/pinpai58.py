@@ -27,8 +27,8 @@ class Pinpai58Spider(scrapy.Spider):
     allowed_domains = ['58.com']
     start_urls = []
     custom_settings = {
-        'DOWNLOAD_DELAY': 2.68,
-        'CONCURRENT_REQUESTS': 1,
+        'DOWNLOAD_DELAY': 1.18,
+        'CONCURRENT_REQUESTS': 2,
     }
     total_page = 100
 
