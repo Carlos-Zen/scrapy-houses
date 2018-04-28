@@ -31,13 +31,14 @@ def update_unique_key(db,col):
         nuk = create_uniqe_key(d)
         hk = house_key(d)
         # print(uk, ukn)
-        upi = update_int(d)
-        up = {'house_key': hk, 'uniqe_key': uk,'uniqe_key_no_date': nuk}
-        up.update(upi)
         try:
+            upi = update_int(d)
+            up = {'house_key': hk, 'uniqe_key': uk, 'uniqe_key_no_date': nuk}
+            up.update(upi)
             collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': up}, upsert=True)
-        except DuplicateKeyError:
+        except Exception as e:
             collection.remove({'_id':d['_id']})
+            print(e)
     client.close()
         # break
 
@@ -84,11 +85,15 @@ def update_collections_posotion():
     for col in collections:
         update_position_key('house',col)
 
+
+from multiprocessing import Pool
+
 def update_collections_uniqe_keys():
-
+    p = Pool(len(collections))
     for col in collections:
-        update_unique_key('house',col)
-
+        p.apply(update_unique_key, ('house', col))
+    p.close()
+    p.join()
 
 def count_house_record():
     total = 0

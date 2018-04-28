@@ -95,5 +95,5 @@ class MongoPipeline(object):
         except DuplicateKeyError:
             # 重复计数，插入重复库中
             self.dups_count += 1
-            self.db_collision[self.collision_collection].insert(dict(item))
+            # self.db_collision[self.collision_collection].insert(dict(item))
         return item

@@ -128,13 +128,13 @@ MONGO_COLLECTION_COLLISION = 'collision'
 PROXY_LIST = ['10.6.52.147:3128']
 
 # crawl control
-CRAWL_PAGE = 200
+CRAWL_PAGE = 300
 # CLOSESPIDER_ERRORCOUNT = 300
 # duplate control
-DUPS_LIMIT = 300
-DUPS_STOP = True  # 去重中断任务
+DUPS_LIMIT = 3000
+DUPS_STOP = False  # 去重中断任务
 DUPS_KEYS = ['city', 'district', 'rent_type', 'address', 'orientation', 'room_area', 'floor', 'building_floor',
-             'rental', 'lati', 'longi']
+             'rental', 'lati', 'longi', 'apartment', 'bedroom_type', 'room_num', 'hall_num', 'bathroom_num']
 HOUSE_KEYS = ['city', 'district', 'rent_type', 'address', 'orientation', 'room_area', 'floor', 'building_floor',
               'lati', 'longi', 'apartment', 'bedroom_type', 'room_num', 'hall_num', 'bathroom_num']
 # city and start urls

@@ -6,6 +6,9 @@ from shells import mongo
 
 # mongo.update_collections_posotion()
 # mongo.delete_collections_dups_keys()
-mongo.update_collections_uniqe_keys()
 
+def main():
+    mongo.update_collections_uniqe_keys()
+if __name__ == "__main__":
+    main()
 # from bson.json_util import dumps
