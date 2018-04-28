@@ -23,6 +23,39 @@ collections = [
         "house_zhengzhou"
     ]
 
+def danke_update(db,col,query):
+    """
+    蛋壳数据清洗
+    :param db:
+    :param col:
+    :param query:
+    :param set:
+    :return:
+    """
+    collection = client[db][col]
+    for d in collection.find(query,no_cursor_timeout=True):
+        set = {
+            'traffic': d['traffic'][0],
+            'address': d['traffic'][0]
+        }
+        collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': set})
+    client.close()
+
+def batch_danke_update():
+
+    for col in collections:
+        danke_update('house', col, {'source_from': 'danke'})
+
+def batch_update(db,col,query,set):
+    collection = client[db][col]
+    for d in collection.find(query,no_cursor_timeout=True):
+        try:
+            collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': set}, upsert=True)
+        except Exception as e:
+            collection.remove({'_id':d['_id']})
+            print(e)
+    client.close()
+
 def update_unique_key(db,col):
     collection = client[db][col]
     for d in collection.find({},no_cursor_timeout=True):
@@ -92,6 +125,13 @@ def update_collections_uniqe_keys():
     p = Pool(len(collections))
     for col in collections:
         p.apply(update_unique_key, ('house', col))
+    p.close()
+    p.join()
+
+def batch_update_collections(query,set):
+    p = Pool(len(collections))
+    for col in collections:
+        p.apply(batch_update, ('house', col, query, set))
     p.close()
     p.join()
 

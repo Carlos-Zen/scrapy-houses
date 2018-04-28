@@ -46,7 +46,7 @@ class DankeSpider(scrapy.Spider):
         '''
         if self.settings.get('CRAWL_PAGE') > 0: self.total_page = self.settings.get('CRAWL_PAGE')
         for i in range(1, self.total_page):
-            yield scrapy.Request(response.url + '?p=' + str(i), self.parse_page_url)
+            yield scrapy.Request(response.url + '?page=' + str(i), self.parse_page_url)
 
     def parse_page_url(self, response):
         '''
