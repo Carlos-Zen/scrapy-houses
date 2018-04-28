@@ -104,9 +104,11 @@ class DankeSpider(scrapy.Spider):
         except Exception:
             pass
         try:
-            house['traffic'] = response.css('div.room-detail-box div.room-list label')[7].css('::text').re(r'：(.*)')
+            house['traffic'] = response.css('div.room-detail-box div.room-list label')[7].css('::text').re_first(r'：(.*)')
+            house['address'] = house['traffic']
         except Exception:
             pass
+
         try:
             house['features'] = response.css("div.room-detail-right div.room-title span::text").extract()
             if len(response.css("div.room-detail-right div.room-title span::text").re(REG['bathroom'])) > 0: house[
