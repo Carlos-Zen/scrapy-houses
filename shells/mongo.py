@@ -34,11 +34,14 @@ def danke_update(db,col,query):
     """
     collection = client[db][col]
     for d in collection.find(query,no_cursor_timeout=True):
-        set = {
-            'traffic': d['traffic'][0],
-            'address': d['traffic'][0]
-        }
-        collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': set})
+        try:
+            set = {
+                'traffic': d['traffic'][0],
+                'address': d['traffic'][0]
+            }
+            collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': set})
+        except Exception:
+            pass
     client.close()
 
 def batch_danke_update():
