@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from shells import mongo
+from shells import mongo, update_pinpai
 from multiprocessing import Pool
 
 # mongo.delete_dups_row('house', 'house_shanghai')
@@ -10,7 +10,7 @@ from multiprocessing import Pool
 
 def main():
     # mongo.update_collections_uniqe_keys()
-    mongo.batch_danke_update()
+    update_pinpai.update_collections_uniqe_keys()
 
 
 if __name__ == "__main__":

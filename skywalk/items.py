@@ -48,6 +48,7 @@ class HouseItem(scrapy.Item):
     crawl_date = scrapy.Field()
     pictures = scrapy.Field()
     source_from = scrapy.Field()
+    source_url = scrapy.Field()
     publisher = scrapy.Field()
     traffic = scrapy.Field()
     uniqe_key = scrapy.Field() #抓取数据特征，有时间

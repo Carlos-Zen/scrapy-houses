@@ -5,7 +5,7 @@ import scrapy
 from skywalk.items import *
 from skywalk.utils import *
 from skywalk.dict import *
-import time
+import datetime
 
 REG = {
     'number': r'(\d+)',
@@ -89,6 +89,7 @@ class BeikeSpider(scrapy.Spider):
             house['source_from'] = self.name
             house['branch'] = response.css('p.content__aside--title span::text').extract_first()
             house['brand'] = houses['apartment_name']
+            house['apartment'] =house['brand']
             house['style'] = one_house['name']
             # title = 品牌 + 分店 + 房型
             house['title'] = house['brand'] + response.css('p.content__aside--title span::text').extract_first() + \
@@ -116,11 +117,12 @@ class BeikeSpider(scrapy.Spider):
             house['uniqe_key'] = uniqe_key(house)
             house['house_key'] = house_key(house)
             # date and unique_key
-            house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
+            house['crawl_date'] = datetime.datetime.now()
             house['uniqe_key_no_date'] = create_uniqe_key(house)
             # collection_name
             house['collection'] = get_collection_name(house['city'])
             house['multi'] = 1
+            house['source_url'] = response.url
             yield house
 
     def parse_normal_page(self, response):
@@ -181,8 +183,9 @@ class BeikeSpider(scrapy.Spider):
         house['uniqe_key'] = uniqe_key(house)
         house['house_key'] = house_key(house)
         # date and unique_key
-        house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
+        house['crawl_date'] = datetime.datetime.now()
         house['uniqe_key_no_date'] = create_uniqe_key(house)
         # collection_name
         house['collection'] = get_collection_name(house['city'])
+        house['source_url'] = response.url
         return house

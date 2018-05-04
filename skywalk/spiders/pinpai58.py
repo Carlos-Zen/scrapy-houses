@@ -3,7 +3,7 @@ import scrapy
 from skywalk.items import *
 from skywalk.utils import *
 from skywalk.dict import *
-import time
+import datetime
 
 REG = {
     'number': r'(\d+)',
@@ -68,7 +68,7 @@ class Pinpai58Spider(scrapy.Spider):
             self.parse_normal_page(response, house)
 
         # date and unique_key
-        house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
+        house['crawl_date'] = datetime.datetime.now()
         house['uniqe_key_no_date'] = create_uniqe_key(house)
         # collection_name
         house['collection'] = get_collection_name(house['city'])
@@ -85,6 +85,7 @@ class Pinpai58Spider(scrapy.Spider):
         house['brand'] = house['title']
         house['rent_type'] = 3  # 公寓
         house['branch'] = response.css('p.head-address::text').extract_first()
+        house['apartment'] = house['title']
 
         house['city'] = response.css('div.curmbar a')[0].css('::text').re_first(r'(.*)公寓')
         house['district'] = response.css('div.curmbar a')[1].css('::text').re_first(r'(.*)公寓')
@@ -124,7 +125,7 @@ class Pinpai58Spider(scrapy.Spider):
             'coordinates': [float(house['longi']), float(house['lati'])]
         }
         house['uniqe_key'] = uniqe_key(house)
-
+        house['source_url'] = response.url
 
     def parse_normal_page(self, response, house):
         """
@@ -136,7 +137,10 @@ class Pinpai58Spider(scrapy.Spider):
         house['title'] = response.css('div.housedetail h2::text').extract_first()
         house['brand'] = response.css('div.apartment-info span::text').extract_first()
         house['publish_date'] = response.css('div.tags span::text').re_first(r'.*(\d{4}[-\/]\d{2}[-\/]\d{2})')
-
+        try:
+            house['apartment'] = house['title'].split(' ')[1]
+        except Exception:
+            pass
         house['city'] = response.css('div.crumbar a')[0].css('::text').re_first(r'(.*)公寓')
         house['district'] = response.css('div.crumbar a')[1].css('::text').re_first(r'(.*)公寓')
         house['block'] = response.css('div.crumbar a')[2].css('::text').re_first(r'(.*)公寓')
@@ -184,3 +188,4 @@ class Pinpai58Spider(scrapy.Spider):
         }
         house['uniqe_key'] = uniqe_key(house)
         house['house_key'] = house_key(house)
+        house['source_url'] = response.url

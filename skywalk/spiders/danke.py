@@ -5,7 +5,7 @@ import scrapy
 from skywalk.items import *
 from skywalk.utils import *
 from skywalk.dict import *
-import time
+import datetime
 
 REG = {
     'number': r'(\d+)',
@@ -132,8 +132,9 @@ class DankeSpider(scrapy.Spider):
         house['uniqe_key'] = uniqe_key(house)
         house['house_key'] = house_key(house)
         # date and unique_key
-        house['crawl_date'] = time.strftime("%Y-%m-%d", time.localtime())
+        house['crawl_date'] = datetime.datetime.now()
         house['uniqe_key_no_date'] = create_uniqe_key(house)
         # collection_name
         house['collection'] = get_collection_name(house['city'])
+        house['source_url'] = response.url
         yield house
