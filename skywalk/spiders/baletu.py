@@ -74,8 +74,14 @@ class BaletuSpider(scrapy.Spider):
         house['city'] = response.css('script').re_first(REG['city'])
 
         house['traffic'] = response.css("div.house-text-list dd::text").extract_first()
-        house['room_num'], house['hall_num'], house['bathroom_num'] = response.css("div.house-text-list dd::text")[
+        huxing = response.css("div.house-text-list dd::text")[
             1].re(REG['huxing'])
+        try:
+            house['room_num'] = int(huxing[0])
+            house['hall_num'] = int(huxing[1])
+            house['bathroom_num'] = int(huxing[2])
+        except Exception:
+            pass
         house['floor'], house['building_floor'] = response.css("div.house-text-list dd")[2].css("::text").re(
             REG['floor'])
 

@@ -106,8 +106,14 @@ class Pinpai58Spider(scrapy.Spider):
         payment_rental, payment_deposit = response.css('div.detailMoney span.deposit::text').re(REG['payment'])
         house['payment_deposit'],house['payment_rental'] = chinese_to_arabic(payment_rental), chinese_to_arabic(
             payment_deposit)
-        house['room_num'], house['hall_num'], house['bathroom_num'] = response.css("div.detailHX span::text").re(
+        huxing = response.css("div.detailHX span::text").re(
             REG['huxing'])
+        try:
+            house['room_num'] = int(huxing[0])
+            house['hall_num'] = int(huxing[1])
+            house['bathroom_num'] = int(huxing[2])
+        except Exception:
+            pass
         house['room_area'] = int(response.css("div.detailArea span::text").re_first(REG['number']))
         house['orientation'] = response.css("div.detailCX span::text").extract_first()
         house['address'] = response.css("div.detailAddress span::text").extract_first()
