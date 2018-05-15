@@ -29,15 +29,10 @@ def update_data(db,col):
         try:
             if d['district'][-1] not in ['区','县']:
                 up['district'] = d['district']+'区'
-
+                collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': up})
         except Exception:
-            print(d['title'])
+            print(up)
             pass
-        try:
-
-            collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': up})
-        except Exception as e:
-            print(e)
     client.close()
 
 
@@ -47,3 +42,6 @@ def update_collections_uniqe_keys():
         p.apply(update_data, ('house', col))
     p.close()
     p.join()
+
+update_collections_uniqe_keys()
+# update_data('house','house_chengdu')
