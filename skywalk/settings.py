@@ -167,6 +167,7 @@ START_URLS = {
         'http://gz.baletu.com/zhaofang/',
         'http://nj.baletu.com/zhaofang/',
         'http://tj.baletu.com/zhaofang/',
+        'http://sz.baletu.com/zhaofang/',
     ],
     'pinpai58': [
         'http://sh.58.com/pinpaigongyu/',
@@ -180,6 +181,7 @@ START_URLS = {
         'http://gz.58.com/pinpaigongyu/',
         'http://nj.58.com/pinpaigongyu/',
         'http://tj.58.com/pinpaigongyu/',
+        'http://sz.58.com/pinpaigongyu/',
     ],
     'beike': [
         'http://sh.zu.ke.com/zufang/',
@@ -193,6 +195,7 @@ START_URLS = {
         'http://gz.zu.ke.com/zufang/',
         'http://nj.zu.ke.com/zufang/',
         'http://tj.zu.ke.com/zufang/',
+        'http://sz.zu.ke.com/zufang/',
     ],
     'ziroom': [
         'http://sh.ziroom.com/z/nl/z3.html',
@@ -206,6 +209,7 @@ START_URLS = {
         'http://gz.ziroom.com/z/nl/z3.html',
         'http://nj.ziroom.com/z/nl/z3.html',
         'http://tj.ziroom.com/z/nl/z3.html',
+        'http://sz.ziroom.com/z/nl/z3.html',
     ],
     'danke': [
         'https://www.dankegongyu.com/room/sh',
@@ -219,6 +223,7 @@ START_URLS = {
         'https://www.dankegongyu.com/room/gz',
         'https://www.dankegongyu.com/room/nj',
         'https://www.dankegongyu.com/room/tj',
+        'https://www.dankegongyu.com/room/sz',
     ]
 
 }
