@@ -8,6 +8,7 @@
 import pymongo
 from pymongo.errors import *
 from skywalk.items import INT_FIELD
+from skywalk.utils import get_subway, get_bus
 
 # class SkywalkPipeline(object):
 #     def process_item(self, item, spider):
@@ -88,6 +89,9 @@ class MongoPipeline(object):
         if item['district'][-1] not in ['区', '县']:
             item['district'] = item['district'] + '区'
 
+        # 加入地铁数据
+        item['subway'] = get_subway(item['longi'], item['lati'])
+        item['bus'] = get_bus(item['longi'], item['lati'])
         # 重复数据导致spider中断
         if self.crawler.settings.get('DUPS_STOP') and self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
             self.crawler.engine.close_spider(spider, 'Dups item reach the limit .')

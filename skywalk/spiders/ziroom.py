@@ -29,6 +29,7 @@ REG = {
 
 class ZiroomSpider(scrapy.Spider):
     name = 'ziroom'
+    brand = '自如友家'
     allowed_domains = ['ziroom.com']
     start_urls = []
     custom_settings = {
@@ -71,7 +72,7 @@ class ZiroomSpider(scrapy.Spider):
         house = HouseItem()
 
         house['source_from'] = self.name
-        house['brand'] = self.name
+        house['brand'] = self.brand
         # title = 品牌 + 分店 + 房型
         house['title'] = trim(response.css('div.room_name  h2::text').extract_first())
 

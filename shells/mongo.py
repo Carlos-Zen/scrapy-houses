@@ -144,7 +144,6 @@ def count_house_record():
     for col in collections:
         collection = client['house'][col]
         count = collection.count()
-        print(count)
         total = total+count
         count_collection.insert({'date': datetime.datetime.now(), 'count': count, 'city': col[6:]})
     count_collection.insert({'date': datetime.datetime.now(), 'count': total, 'city': 'all_cities'})

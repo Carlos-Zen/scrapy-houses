@@ -59,6 +59,8 @@ class HouseItem(scrapy.Item):
     house_key = scrapy.Field() #房间特征
     collection = scrapy.Field()
     multi = scrapy.Field() # 一楼多间，一房多间
+    subway = scrapy.Field() # 附近地铁
+    bus = scrapy.Field() # 附近地铁
 
     def set(self, key, value):
         self._values[key] = value

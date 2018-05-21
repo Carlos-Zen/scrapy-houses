@@ -2,6 +2,7 @@
 import hashlib
 from skywalk.settings import CITYS, DUPS_KEYS, HOUSE_KEYS
 import time
+import requests
 
 """
 巴乐兔，字符串处理，解析数据
@@ -66,6 +67,7 @@ def uniqe_key(item):
     """生成唯一键值"""
     return md5(item_values_str)
 
+
 def house_key(item):
     """
     生成唯一key
@@ -101,3 +103,21 @@ def get_collection_name(city):
 
 def find_bathroom(str):
     str.find()
+
+def get_subway(longi, lati, radius=3000):
+    location = str(longi) + ',' + str(lati)
+    url = 'http://restapi.amap.com/v3/place/around?key=4fffb787179883e0bbd61a22892316ac&location=%s&output=json&radius=%s&types=地铁' % (location, radius)
+    resp = requests.get(url)
+    return [{'station': sub['name'], 'address': sub['address'], 'distance': int(sub['distance']), 'position': {
+            'type': 'Point',
+            'coordinates': [float(i) for i in sub['location'].split(',')]
+        }} for sub in resp.json()['pois']]
+
+def get_bus(longi, lati, radius=1500):
+    location = str(longi) + ',' + str(lati)
+    url = 'http://restapi.amap.com/v3/place/around?key=4fffb787179883e0bbd61a22892316ac&location=%s&output=json&radius=%s&types=公交' % (location, radius)
+    resp = requests.get(url)
+    return [{'station': sub['name'], 'address': sub['address'], 'position': {
+            'type': 'Point',
+            'coordinates': [float(i) for i in sub['location'].split(',')]
+        }} for sub in resp.json()['pois']]
