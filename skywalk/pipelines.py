@@ -90,8 +90,12 @@ class MongoPipeline(object):
             item['district'] = item['district'] + '区'
 
         # 加入地铁数据
-        item['subway'] = get_subway(item['longi'], item['lati'])
-        item['bus'] = get_bus(item['longi'], item['lati'])
+
+        try:
+            item['subway'] = get_subway(item['longi'], item['lati'])
+            # item['bus'] = get_bus(item['longi'], item['lati'])
+        except Exception:
+            pass
         # 重复数据导致spider中断
         if self.crawler.settings.get('DUPS_STOP') and self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
             self.crawler.engine.close_spider(spider, 'Dups item reach the limit .')

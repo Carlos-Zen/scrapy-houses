@@ -40,15 +40,17 @@ def update_data(db,col):
     collection = client[db][col]
     for d in collection.find(no_cursor_timeout=True):
         up = dict()
+
+        if d.get('brand','') == 'ziroom':
+            up['brand'] = '自如友家'
         try:
-            if d['brand'] == 'ziroom':
-                up['brand'] = '自如友家'
-            up['subway'] = get_subway(d['longi'], d['lati'])
-            up['bus'] = get_bus(d['longi'], d['lati'])
-            collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': up}, upsert=True)
-        except Exception:
-            print(up)
-            pass
+            if not d.get('subway', False):
+                up['subway'] = get_subway(d['longi'], d['lati'])
+            # up['bus'] = get_bus(d['longi'], d['lati'])
+            if up:
+                collection.update_one({'_id': ObjectId(d['_id'])}, {'$set': up}, upsert=True)
+        except Exception as e:
+            print(d, e)
     client.close()
 
 

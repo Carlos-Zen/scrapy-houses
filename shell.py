@@ -13,6 +13,7 @@ def main():
     # update_pinpai.update_collections_uniqe_keys()
     update_fields.update_collections_uniqe_keys()
 
+
 if __name__ == "__main__":
     main()
 # from bson.json_util import dumps

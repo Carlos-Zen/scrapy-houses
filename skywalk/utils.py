@@ -104,9 +104,22 @@ def get_collection_name(city):
 def find_bathroom(str):
     str.find()
 
+import random
+
+KEYS = [
+    "85052c21e2b9d408c249da5fc0c8a9fa",
+    "5a1964338b3c14b25e09dcbab08e5892",
+    "1a2da678b5c31959901e8d3f13fd64eb",
+    "47865bbc4138cabdcb0e9f6ffd1f983b",
+    "848a0721a4da7608d0302776a74005af",
+    "68e66d66df3ed63f98f2e3ed46baca6a",
+    "19b441ea42775e97a693bd7f5afbc6f8",
+    "c38afce089a55f3fc25110e6eabbf079",
+    # "4fffb787179883e0bbd61a22892316ac",
+]
 def get_subway(longi, lati, radius=3000):
     location = str(longi) + ',' + str(lati)
-    url = 'http://restapi.amap.com/v3/place/around?key=4fffb787179883e0bbd61a22892316ac&location=%s&output=json&radius=%s&types=地铁' % (location, radius)
+    url = 'http://restapi.amap.com/v3/place/around?key=%s&location=%s&output=json&radius=%s&types=地铁' % (random.choice(KEYS), location, radius)
     resp = requests.get(url)
     return [{'station': sub['name'], 'address': sub['address'], 'distance': int(sub['distance']), 'position': {
             'type': 'Point',
@@ -115,7 +128,7 @@ def get_subway(longi, lati, radius=3000):
 
 def get_bus(longi, lati, radius=1500):
     location = str(longi) + ',' + str(lati)
-    url = 'http://restapi.amap.com/v3/place/around?key=4fffb787179883e0bbd61a22892316ac&location=%s&output=json&radius=%s&types=公交' % (location, radius)
+    url = 'http://restapi.amap.com/v3/place/around?key=%s&location=%s&output=json&radius=%s&types=公交' % (random.choice(KEYS), location, radius)
     resp = requests.get(url)
     return [{'station': sub['name'], 'address': sub['address'], 'position': {
             'type': 'Point',
