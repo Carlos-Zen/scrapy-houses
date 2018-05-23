@@ -87,9 +87,11 @@ class MongoPipeline(object):
         # int转化部分参数
         [item.set(f, int(item.get(f, 0))) for f in INT_FIELD]
 
+        # 数据处理
         if item['district'][-1] not in ['区', '县']:
             item['district'] = item['district'] + '区'
-
+        item['brand'].replace('管家','')
+        item['brand'].replace('经纪人','')
         # 重复数据导致spider中断
         if self.crawler.settings.get('DUPS_STOP') and self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
             self.crawler.engine.close_spider(spider, 'Dups item reach the limit .')

@@ -48,10 +48,11 @@ def update_data(db,col):
 
 def update_brand(db,col):
     collection = client[db][col]
-    collection.update({'source_from':'ziroom'},{'$set': {'brand':'自如友家'}})
+    collection.update_many({'source_from':'ziroom'},{'$set': {'brand':'自如公寓'}})
 
 def update_brand_batch():
     for col in collections:
+        print(col)
         update_brand('house',col)
 
 def update_collections_uniqe_keys():
