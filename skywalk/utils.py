@@ -115,7 +115,17 @@ KEYS = [
     "68e66d66df3ed63f98f2e3ed46baca6a",
     "19b441ea42775e97a693bd7f5afbc6f8",
     "c38afce089a55f3fc25110e6eabbf079",
-    # "4fffb787179883e0bbd61a22892316ac",
+    "4fffb787179883e0bbd61a22892316ac",
+    "beef858339fb80fe08e92ad8c0bf43ed",
+    "4ad0ca41ff3cd35dfb3136949ffc70dd",
+    "38044be22e013b0cd097c50e9c00a0ac",
+    "c03e264f0394e0f5d7c83052224d671f",
+    "fa811c91efe7db125ba6391e549f0b43",
+    "c08a429e892bfdbf335bb2beef615e39",
+    "95789ac87a0d072d34f85af581390ad6",
+    "6a135f3c895d1c50c6c1c650f8e2efdd",
+    "0aa30b59722d6a849060b4cba4570528",
+    "254507bab4f5b49fda17de39ce6c13f2",
 ]
 def get_subway(longi, lati, radius=3000):
     location = str(longi) + ',' + str(lati)

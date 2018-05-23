@@ -89,23 +89,27 @@ class MongoPipeline(object):
         if item['district'][-1] not in ['区', '县']:
             item['district'] = item['district'] + '区'
 
-        # 加入地铁数据
-
-        try:
-            item['subway'] = get_subway(item['longi'], item['lati'])
-            # item['bus'] = get_bus(item['longi'], item['lati'])
-        except Exception:
-            pass
         # 重复数据导致spider中断
         if self.crawler.settings.get('DUPS_STOP') and self.dups_count == self.crawler.settings.get('DUPS_LIMIT'):
             self.crawler.engine.close_spider(spider, 'Dups item reach the limit .')
 
         collection_name = self.collection_name % (item['collection'],)
-
-        try:
-            self.db[collection_name].insert(dict(item))
-        except DuplicateKeyError:
+        hasone = self.db[collection_name].findOne({'uniqe_key': item['uniqe_key']})
+        if hasone:
             # 重复计数，插入重复库中
             self.dups_count += 1
-            # self.db_collision[self.collision_collection].insert(dict(item))
+            udpate = {}
+            update['dup_times'] = hasone.get('dup_time', 0)
+            update['dup_times'] = hasone.get('dup_dates', 0)
+        else:
+            # 加入地铁数据
+            try:
+                item['subway'] = get_subway(item['longi'], item['lati'])
+                # item['bus'] = get_bus(item['longi'], item['lati'])
+            except Exception:
+                pass
+            try:
+                self.db[collection_name].insert(dict(item))
+            except Exception:
+                pass
         return item

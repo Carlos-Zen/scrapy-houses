@@ -61,6 +61,8 @@ class HouseItem(scrapy.Item):
     multi = scrapy.Field() # 一楼多间，一房多间
     subway = scrapy.Field() # 附近地铁
     bus = scrapy.Field() # 附近地铁
+    dup_times = scrapy.Field() #重复次数
+    dup_dates = scrapy.Field() #重复日期
 
     def set(self, key, value):
         self._values[key] = value
