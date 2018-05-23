@@ -26,6 +26,25 @@ REG = {
     'orientation': r'\s(.*)',
 }
 
+SHORT_URI = {
+    'sh': '上海',
+    'www': '北京',
+    'cd': '成都',
+    'cq': '重庆',
+    'hz': '杭州',
+    'wh': '武汉',
+    'xa': '西安',
+    'zz': '郑州',
+    'sz': '苏州',
+    'sz': '深圳',
+    'gz': '广州',
+    'tj': '天津',
+    'nj': '南京',
+}
+
+def getCity(url):
+    path = url.replace('http://','').split('.')[0]
+    return SHORT_URI[path]
 
 class ZiroomSpider(scrapy.Spider):
     name = 'ziroom'
@@ -76,7 +95,7 @@ class ZiroomSpider(scrapy.Spider):
         # title = 品牌 + 分店 + 房型
         house['title'] = trim(response.css('div.room_name  h2::text').extract_first())
 
-        house['city'] = response.css('span#curCityName::text').extract_first()
+        house['city'] = getCity(response.url)
         house['district'] = response.css('div.node_infor a')[1].css('::text').re_first(r'(.*).租')
         house['block'] = response.css('div.node_infor a')[2].css('::text').re_first(r'(.*)公寓出租')
         house['apartment'] = response.css('div.node_infor a')[3].css('::text').re_first(r'(.*)租房信息')

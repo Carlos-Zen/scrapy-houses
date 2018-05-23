@@ -9,7 +9,8 @@ import pymongo
 from pymongo.errors import *
 from skywalk.items import INT_FIELD
 from skywalk.utils import get_subway, get_bus
-
+import datetime
+from bson.objectid import ObjectId
 # class SkywalkPipeline(object):
 #     def process_item(self, item, spider):
 #         print(item)
@@ -94,13 +95,14 @@ class MongoPipeline(object):
             self.crawler.engine.close_spider(spider, 'Dups item reach the limit .')
 
         collection_name = self.collection_name % (item['collection'],)
-        hasone = self.db[collection_name].findOne({'uniqe_key': item['uniqe_key']})
+        hasone = self.db[collection_name].find_one({'uniqe_key': item['uniqe_key']})
         if hasone:
             # 重复计数，插入重复库中
             self.dups_count += 1
-            udpate = {}
+            update = {}
             update['dup_times'] = hasone.get('dup_time', 0)
-            update['dup_times'] = hasone.get('dup_dates', 0)
+            update['dup_dates'] = hasone.get('dup_dates', []).append(datetime.datetime.now())
+            self.db[collection_name].update_one({'_id': ObjectId(hasone['_id'])}, {'$set': update}, upsert=True)
         else:
             # 加入地铁数据
             try:
