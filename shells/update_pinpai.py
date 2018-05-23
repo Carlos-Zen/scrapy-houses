@@ -46,6 +46,13 @@ def update_data(db,col):
             print(e)
     client.close()
 
+def update_brand(db,col):
+    collection = client[db][col]
+    collection.update({'source_from':'ziroom'},{'$set': {'brand':'自如友家'}})
+
+def update_brand_batch():
+    for col in collections:
+        update_brand('house',col)
 
 def update_collections_uniqe_keys():
     p = Pool(len(collections))
@@ -53,3 +60,5 @@ def update_collections_uniqe_keys():
         p.apply(update_data, ('house', col))
     p.close()
     p.join()
+
+update_brand_batch()    

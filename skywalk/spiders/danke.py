@@ -28,6 +28,7 @@ REG = {
 
 class DankeSpider(scrapy.Spider):
     name = 'danke'
+    brand = '蛋壳公寓'
     allowed_domains = ['dankegongyu.com']
     start_urls = []
     custom_settings = {
@@ -68,7 +69,7 @@ class DankeSpider(scrapy.Spider):
         house = HouseItem()
 
         house['source_from'] = self.name
-        house['brand'] = self.name
+        house['brand'] = self.brand
         # title = 品牌 + 分店 + 房型
         house['title'] = trim(response.css('div.room-detail  div.room-name h1::text').extract_first())
 
