@@ -101,8 +101,14 @@ class MongoPipeline(object):
             # 重复计数，插入重复库中
             self.dups_count += 1
             update = {}
-            update['dup_times'] = hasone.get('dup_time', 0)
-            update['dup_dates'] = hasone.get('dup_dates', []).append(datetime.datetime.now())
+            update['dup_times'] = hasone.get('dup_time')
+            if update['dup_times'] == None:
+                update['dup_times'] = 0
+            update['dup_times'] += 1
+            update['dup_dates'] = hasone.get('dup_dates')
+            if update['dup_dates'] == None:
+                update['dup_dates'] = []
+            update['dup_dates'].append(datetime.datetime.now())
             self.db[collection_name].update_one({'_id': ObjectId(hasone['_id'])}, {'$set': update}, upsert=True)
         else:
             # 加入地铁数据
