@@ -89,6 +89,7 @@ class BeikeSpider(scrapy.Spider):
             house['source_from'] = self.name
             house['branch'] = response.css('p.content__aside--title span::text').extract_first()
             house['brand'] = houses['apartment_name']
+            house['brand_logo'] = response.css('span.content__aside__list--icon::attr(style)').re_first(r'(http.*)\)')
             house['apartment'] =house['brand']
             house['style'] = one_house['name']
             # title = 品牌 + 分店 + 房型
@@ -135,7 +136,8 @@ class BeikeSpider(scrapy.Spider):
         house = HouseItem()
 
         house['source_from'] = self.name
-        house['brand'] = trim(response.css('p.content__aside__list--subtitle::text').extract_first())
+        house['brand'] = trim(response.css('p.content__aside__list--subtitle::text').extract_first()).replace('管家','').replace('经纪人','')
+        house['brand_logo'] = response.css('span.content__aside__list--icon::attr(style)').re_first(r'(http.*)\)')
         # title = 品牌 + 分店 + 房型
         house['title'] = response.css('div.content  p.content__title::text').extract_first()
 

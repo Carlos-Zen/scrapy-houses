@@ -13,6 +13,7 @@ class HouseItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
     brand = scrapy.Field()
+    brand_logo = scrapy.Field()
     branch = scrapy.Field()
     style = scrapy.Field()
     empty_house_num = scrapy.Field()  # 集中式

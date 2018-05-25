@@ -83,6 +83,7 @@ class Pinpai58Spider(scrapy.Spider):
         """
         house['title'] = response.css('p.head-title::text').extract_first()
         house['brand'] = house['title']
+        house['brand_logo'] = response.css('div.gy-logo img::attr(src)').extract_first()
         house['rent_type'] = 3  # 公寓
         house['branch'] = response.css('p.head-address::text').extract_first()
         house['apartment'] = house['title']
@@ -142,6 +143,7 @@ class Pinpai58Spider(scrapy.Spider):
         """
         house['title'] = response.css('div.housedetail h2::text').extract_first()
         house['brand'] = response.css('div.apartment-info span::text').extract_first()
+        house['brand_logo'] = response.css('div.apartment-info img::attr(src)').extract_first()
         house['publish_date'] = response.css('div.tags span::text').re_first(r'.*(\d{4}[-\/]\d{2}[-\/]\d{2})')
         try:
             house['apartment'] = house['title'].split(' ')[1]
