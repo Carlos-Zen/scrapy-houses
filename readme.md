@@ -1,24 +1,10 @@
-###use agent to scrapy shell
+### use agent to scrapy shell
 scrapy shell http://sh.58.com/pinpaigongyu/32655300606023x.shtml -s USER_AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"
 
 
 http://sh.58.com/pinpaigongyu/31486368238267x.shtml
 
 https://sh.zu.ke.com/zufang/
-
-### collections name
-"house_beijing",
-"house_chengdu",
-"house_chongqing",
-"house_guangzhou",
-"house_hangzhou",
-"house_nanjing",
-"house_shanghai",
-"house_suzhou",
-"house_tianjin",
-"house_wuhan",
-"house_xian",
-"house_zhengzhou",
 
 ##mongodb create index
 ### add uniqe key index
@@ -81,24 +67,3 @@ db.runCommand( {
 } )
 
 SON([('geoNear','house_shanghai'),('near',SON([('type','Point'),('coordinates',[121.671597,31.274732] )])),('maxDistance',10),('spherical',True)])
-
-
-# 数量统计
-db.house_shanghai.count()
-db.house_beijing.count()
-db.house_chengdu.count()
-db.house_chongqing.count()
-db.house_guangzhou.count()
-db.house_hangzhou.count()
-db.house_nanjing.count()
-db.house_suzhou.count()
-db.house_tianjin.count()
-db.house_wuhan.count()
-db.house_xian.count()
-db.house_zhengzhou.count()
-
-
-# 高德账号
-13881835007
-
-ff1234
