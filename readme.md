@@ -1,63 +1,30 @@
-### use agent to scrapy shell
+The project show how to use scrapy with proxy and user-agent crawling websites that free from been forbidden.
+
+#Skywalk  
+Skywalk is a collection of scrapy spiders including 58.com,ziroom.com,ke.com,baletu.com and so on. It's a project that means to analysis Housing rental market of china,and aims to supply Business decision for Apartment Operators.
+
+#Require Projects
+Haiproxy, a proxy pool we need to use as a proxy server.
+https://github.com/SpiderClub/haipproxy.git
+
+###use agent to scrapy shell  
 scrapy shell http://sh.58.com/pinpaigongyu/32655300606023x.shtml -s USER_AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"
-
-
-http://sh.58.com/pinpaigongyu/31486368238267x.shtml
-
-https://sh.zu.ke.com/zufang/
 
 ##mongodb create index
 ### add uniqe key index
-db.house_shanghai.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_beijing.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_chengdu.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_chongqing.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_guangzhou.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_hangzhou.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_nanjing.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_suzhou.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_tianjin.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_wuhan.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_xian.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-db.house_zhengzhou.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})
-
-### delete index
-db.house_shanghai.dropIndex('uniqe_key')
-
+db.house_shanghai.ensureIndex({'uniqe_key':1}, {name: 'uniqe',unique: true,dropDups: true,weights: 100,background: true})  
 
 # 2dsphere index
-db.house_shanghai.createIndex( { "position" : "2dsphere" } )
-db.house_beijing.createIndex ({"position" : "2dsphere" })
-db.house_chengdu.createIndex ({"position" : "2dsphere" })
-db.house_chongqing.createIndex ({"position" : "2dsphere" })
-db.house_guangzhou.createIndex ({"position" : "2dsphere" })
-db.house_hangzhou.createIndex ({"position" : "2dsphere" })
-db.house_nanjing.createIndex ({"position" : "2dsphere" })
-db.house_shanghai.createIndex ({"position" : "2dsphere" })
-db.house_suzhou.createIndex ({"position" : "2dsphere" })
-db.house_tianjin.createIndex ({"position" : "2dsphere" })
-db.house_wuhan.createIndex ({"position" : "2dsphere" })
-db.house_xian.createIndex ({"position" : "2dsphere" })
-db.house_zhengzhou.createIndex ({"position" : "2dsphere" })
+db.house_shanghai.createIndex( { "position" : "2dsphere" } )  
+
 
 # full text search index
-db.house_shanghai.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_beijing.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_chengdu.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_chongqing.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_guangzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_hangzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_nanjing.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_suzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_tianjin.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_wuhan.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_xian.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
-db.house_zhengzhou.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})
+db.house_shanghai.createIndex( { title: "text", brand: "text" ,city: "text",district: "text",block: "text",address: "text",apartment: "text",traffic: "text",content: "text"} ,{name:'full_text'},{default_language:'hans'})  
 
 #full text search demo
-db.house_shanghai.find({$test:{$search:"上海"}})
+db.house_shanghai.find({$test:{$search:"上海"}})  
 
-# geo search demo
+# geo search demo  
 db.runCommand( {
    geoNear: "house_shanghai",
    near: { type: "Point" , coordinates: [121.671597,31.274732] } ,
@@ -65,5 +32,3 @@ db.runCommand( {
    maxDistance: 10
 
 } )
-
-SON([('geoNear','house_shanghai'),('near',SON([('type','Point'),('coordinates',[121.671597,31.274732] )])),('maxDistance',10),('spherical',True)])
